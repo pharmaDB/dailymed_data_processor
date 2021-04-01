@@ -1,0 +1,9 @@
+# Editor settings
+.vscode/
+
+# pycache, compiled files
+__pycache__/
+*.pyc
+
+# Temp data folder
+tempdata/
