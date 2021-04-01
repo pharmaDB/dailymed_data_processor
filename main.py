@@ -2,7 +2,8 @@ import argparse
 import json
 import os
 
-from labels.spl import process_paginated_spls
+from spl.index import process_paginated_index
+from spl.history import process_spl_history
 from utils.logging import getLogger
 
 _logger = getLogger("main")
@@ -29,6 +30,11 @@ def parse_args():
         action=argparse.BooleanOptionalAction,
         help="Whether to save the downloaded index data as a json file",
     )
+    parser.add_argument(
+        "--write_history_data",
+        action=argparse.BooleanOptionalAction,
+        help="Whether to save the downloaded SPL history data as a json file",
+    )
     return parser.parse_args()
 
 
@@ -37,14 +43,18 @@ if __name__ == "__main__":
     # page number that was processed in the last run.
     args = parse_args()
     _logger.info(f"Running with args: {args}")
-    all_spls, end_page = process_paginated_spls(
+
+    # Create temp data folder if not exists
+    if not os.path.exists(TEMP_DATA_FOLDER):
+        os.mkdir(TEMP_DATA_FOLDER)
+
+    # Get SPL index data
+    all_spls, end_page = process_paginated_index(
         start_page=args.start_page, num_pages=args.num_pages
     )
 
     # Write data obtained into a json file
     if args.write_index_data:
-        if not os.path.exists(TEMP_DATA_FOLDER):
-            os.mkdir(TEMP_DATA_FOLDER)
         with open(
             os.path.join(
                 TEMP_DATA_FOLDER,
@@ -53,3 +63,17 @@ if __name__ == "__main__":
             "w+",
         ) as f:
             f.write(json.dumps(all_spls))
+
+    # Get SetID history, for all unique setids retrieved
+    all_setid_history = process_spl_history(all_spls)
+
+    # Write data obtained into a json file
+    if args.write_history_data:
+        with open(
+            os.path.join(
+                TEMP_DATA_FOLDER,
+                f"spl_history_pages_{args.start_page}_to_{end_page}.json",
+            ),
+            "w+",
+        ) as f:
+            f.write(json.dumps(all_setid_history))

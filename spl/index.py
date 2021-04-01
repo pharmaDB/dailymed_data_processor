@@ -1,5 +1,4 @@
 import concurrent.futures
-import functools
 import os
 
 import requests
@@ -10,9 +9,9 @@ from utils.logging import getLogger
 _logger = getLogger(__name__)
 
 
-class SplFile:
+class SplIndexFile:
     """
-    Used to an SPL index file by its page number at
+    Used to retrieve and process an SPL index file by its page number at
     https://dailymed.nlm.nih.gov/dailymed/services/v2/spls.xml?page={page_num}
     """
 
@@ -42,24 +41,21 @@ class SplFile:
         Fetches the spl file and processes it. The parsed data is stored in the
         spls attribute.
         """
-        url = f"{SplFile.BASE_URL}?page={self.page_number}"
+        url = f"{SplIndexFile.BASE_URL}?page={self.page_number}"
         r = requests.get(url, allow_redirects=True)
         try:
             dict_data = xmltodict.parse(r.content)
             self.metadata = dict_data["spls"]["metadata"]
             self.spls = dict_data["spls"]["spl"]
         except Exception as e:
-            _logger.error(
-                f"Unable to parse XML data from file {self.filepath},"
-                f"chunk {self.chunk_num}: {e}"
-            )
+            _logger.error(f"Unable to parse XML data from file {self.filepath}")
 
 
 def get_spls(page_num):
-    return SplFile(page_number=page_num).spls
+    return SplIndexFile(page_number=page_num).spls
 
 
-def process_paginated_spls(start_page, num_pages=None):
+def process_paginated_index(start_page, num_pages=None):
     """Fetches index pages in the applicable range, from start_page.
 
     Args:
@@ -86,8 +82,8 @@ def process_paginated_spls(start_page, num_pages=None):
             raise ValueError("SPL index start page must be a positive integer")
 
     # Get max page number available
-    first_spl_file = SplFile(page_number=1)
-    max_page_number = first_spl_file.get_max_page_number()
+    first_spl_index_file = SplIndexFile(page_number=1)
+    max_page_number = first_spl_index_file.get_max_page_number()
 
     if start_page > max_page_number:
         # Nothing to process
