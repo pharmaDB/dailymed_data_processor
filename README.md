@@ -1,9 +1,9 @@
 # dailymed_data_processor
-Scripts to download in bulk and process the drug labels data from DailyMed.
+Scripts to download in bulk and process the drug labels data from DailyMed. For a given SPL index start page and number of pages of the index to process, the scripts parse the index data and obtain the historical set id data.
 
 ## TBD
-1. Get history for a set id
-2. Obtain historical label data
+* Obtain label data for every SPL version in the historical set id data
+* Save to MongoDB the ones that are related to the OrangeBook (restrict by input FDA application numbers)
 
 ## Running the Code
 Requires a minimum python version of `3.6` to run.
