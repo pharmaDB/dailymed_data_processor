@@ -1,6 +1,7 @@
 import concurrent.futures
 import os
 from pathlib import Path
+import re
 import shutil
 import zipfile
 
@@ -25,6 +26,14 @@ class SplHistoricalLabels:
     """
 
     BASE_URL = "https://dailymed.nlm.nih.gov/dailymed/getFile.cfm?type=zip"
+    LABEL_SECTIONS = (
+        "INDICATIONS AND USAGE",
+        "DOSAGE AND ADMINISTRATION",
+        "DOSAGE FORMS AND STRENGTHS",
+        "CONTRAINDICATIONS",
+        "WARNINGS AND PRECAUTIONS",
+        "ADVERSE REACTIONS",
+    )
 
     def __init__(self, spl, download_path):
         if not isinstance(spl, dict):
@@ -85,7 +94,7 @@ class SplHistoricalLabels:
                         self.__process_label(os.path.join(dir_name, file_name))
 
             # Delete the folder (the original zip file and the extracted data)
-            # shutil.rmtree(folder_path)
+            shutil.rmtree(folder_path)
 
     def __process_label(self, xml_file_name):
         """
@@ -120,10 +129,9 @@ class SplHistoricalLabels:
                         "spl_id": Path(xml_file_name).name[:-4],
                         "spl_version": self.__get_spl_version(bs_content),
                         "published_date": self.__get_published_date(bs_content),
-                        "sections": [],  # TBD
+                        "sections": self.__get_label_text(set_id, bs_content),
                     }
                 )
-                print(self.spl_label_versions)
         except Exception as e:
             _logger.error(f"Unable to parse XML data from file: {e}")
 
@@ -148,11 +156,34 @@ class SplHistoricalLabels:
             )
         return list(application_numbers)
 
+    def __get_label_text(self, set_id, bs_content):
+        titles = bs_content.find_all("title")
+        labels = []
+
+        for title in titles:
+            if isinstance(title, Tag):
+                for section_title in SplHistoricalLabels.LABEL_SECTIONS:
+                    if section_title in title.text:
+                        # Process the label text
+                        labels.append(
+                            {
+                                "name": section_title,
+                                "text": re.sub(
+                                    r"\n{3,}", "\n\n", title.parent.get_text()
+                                ),
+                            }
+                        )
+
+        return labels
+
 
 def process_labels_for_set_id(set_id_history):
     labels = SplHistoricalLabels(
         spl=set_id_history, download_path=set_id_history["download_path"]
     )
+    if labels.nda_found:
+        # Save to MongoDB
+        pass
 
 
 def process_historical_labels(all_setid_history, download_path):
