@@ -62,37 +62,31 @@ def get_spl(set_id):
     return spl_history.data
 
 
-def process_spl_history(index_spls):
-    """Fetches the history of the unique set_ids in the input data and returns
-    the list.
+def process_spl_history(set_ids):
+    """
+    Fetches the history of the input set ids.
 
     Args:
-        index_spls (list[dict]): a list of spls from the SPL index. It is expected that
-                                 minimally, each object is a dict with the key "setid".
+        set_ids (list[str]): a list of set ids used by DailyMed.
 
     Raises:
-        ValueError: When index_spls is not set or is not a list
+        ValueError: When set_ids is not set or is not a list
 
     Returns:
         (list[dict]): The list of spls processed from the set_id's history
     """
-    if index_spls is not None and not isinstance(index_spls, list):
-        raise ValueError("SPL index data provided is incompatible.")
-
-    # Get unique setids
-    set_ids = set(
-        filter(lambda x: bool(x), map(lambda x: x["setid"], index_spls))
-    )
+    if set_ids is not None and not isinstance(set_ids, list):
+        raise ValueError("Set ID data provided is incompatible.")
 
     # Fetch and process all set IDs in parallel
-    _logger.info(f"Fetching and processing {len(set_ids)} unique set IDs")
+    _logger.info(f"Fetching and processing {len(set_ids)} set IDs")
     spls = []
     with concurrent.futures.ProcessPoolExecutor() as executor:
         for set_id, spl in zip(
             set_ids,
             executor.map(get_spl, set_ids),
         ):
-            _logger.info(f"Processed set ID {set_id}")
+            _logger.info(f"Processed history for set ID {set_id}")
             spls.append(spl)
 
     # Return the history data of the spls
