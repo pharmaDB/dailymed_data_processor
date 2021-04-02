@@ -1,11 +1,14 @@
 # dailymed_data_processor
 Scripts to download in bulk and process the drug labels data from DailyMed.
 
-For a given SPL index start page and number of pages of the index to process (or) a pre-configured list of DailyMed Set IDs, the scripts parse and obtain the historical set id data and label data for each SPL version.
+For a given SPL index start page and number of pages of the index to process (or) a pre-configured list of DailyMed Set IDs, the scripts parse and obtain the historical set id data and label data for each SPL version. If at least one version of a label set has an association to an NDA application number, the processed labels from the Set ID are saved to MongoDB.
 
-## TBD
-* Obtain label data for every SPL version in the historical Set ID data
-* Save to MongoDB the ones that are related to the OrangeBook (restrict by input FDA application numbers)
+## MongoDB Set Up
+The connection info for the Mongo DB instance is set in the `.env` file. This should work for a standard MongoDB set up on localhost. If using a different set of DB configs, this file must be updated.
+
+A sample docker set up for mongo, that maps to `localhost:27017` can be found [here](https://github.com/pharmaDB/etl_pipeline). This set up also includes the Mongo Express viewer.
+
+![Mongo Express Labels Info](./assets/mongo_express.png)
 
 ## Running the Code
 Requires a minimum python version of `3.6` to run.

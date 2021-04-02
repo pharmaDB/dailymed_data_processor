@@ -1,14 +1,21 @@
 import concurrent.futures
 import os
+from pathlib import Path
+import re
 import shutil
 import zipfile
 
+from bs4 import BeautifulSoup as bs, Tag
 import requests
-import xmltodict
 
+from db.mongo import connect_mongo, MongoClient
 from utils.logging import getLogger
 
 _logger = getLogger(__name__)
+
+_mongo_client = MongoClient(connect_mongo())
+
+MONGO_COLLECTION_NAME = "labels"
 
 
 class SplHistoricalLabels:
@@ -24,6 +31,14 @@ class SplHistoricalLabels:
     """
 
     BASE_URL = "https://dailymed.nlm.nih.gov/dailymed/getFile.cfm?type=zip"
+    LABEL_SECTIONS = (
+        "INDICATIONS AND USAGE",
+        "DOSAGE AND ADMINISTRATION",
+        "DOSAGE FORMS AND STRENGTHS",
+        "CONTRAINDICATIONS",
+        "WARNINGS AND PRECAUTIONS",
+        "ADVERSE REACTIONS",
+    )
 
     def __init__(self, spl, download_path):
         if not isinstance(spl, dict):
@@ -101,78 +116,93 @@ class SplHistoricalLabels:
             raise ValueError(f"File not found at: {xml_file_name}")
         try:
             with open(xml_file_name) as f:
-                dict_data = xmltodict.parse(f.read())
+                # Init BeautifulSoup object with the contents
+                bs_content = bs(f.read(), "lxml")
                 # Get Set ID
-                set_id = dict_data["document"]["setId"]["@root"]
+                set_id = bs_content.document.setid["root"]
                 # Get Application Number
-                application_number = self.__get_application_number(
-                    set_id, dict_data
+                application_numbers = self.__get_application_numbers(
+                    set_id, bs_content
                 )
-                if application_number:
+                if application_numbers:
                     self.nda_found = True
                 # Get other required properties and make label version data
                 self.spl_label_versions.append(
                     {
-                        "application_number": application_number,
+                        "application_numbers": application_numbers,
                         "set_id": set_id,
-                        "spl_version": self.__get_spl_version(dict_data),
-                        "published_date": self.__get_published_date(dict_data),
-                        "sections": [],  # TBD
+                        "spl_id": Path(xml_file_name).name[:-4],
+                        "spl_version": self.__get_spl_version(bs_content),
+                        "published_date": self.__get_published_date(bs_content),
+                        "sections": self.__get_label_text(set_id, bs_content),
                     }
                 )
         except Exception as e:
             _logger.error(f"Unable to parse XML data from file: {e}")
 
     def __get_spl_version(self, label_data):
-        return label_data["document"]["versionNumber"]["@value"]
+        return label_data.document.versionnumber["value"]
 
     def __get_published_date(self, label_data):
-        date = label_data["document"]["effectiveTime"]["@value"]
+        date = label_data.document.effectivetime["value"]
         return f"{date[:4]}-{date[4:6]}-{date[-2:]}"
 
-    def __get_application_number(self, set_id, label_data):
-        # TODO: Handle possibility of more than 1 NDA number in a label,
-        # if needed.
+    def __get_application_numbers(self, set_id, bs_content):
+        application_numbers = set()
         try:
-            comp_list = label_data["document"]["component"]["structuredBody"][
-                "component"
-            ]
-            for comp in comp_list:
-                try:
-                    subj_list = comp["section"]["subject"]
-                    for sub in subj_list:
-                        subj_of_list = sub["manufacturedProduct"]["subjectOf"]
-                        for subj_of in subj_of_list:
-                            display_name = subj_of["approval"]["code"][
-                                "@displayName"
-                            ]
-                            if display_name == "NDA":
-                                application_number = subj_of["approval"]["id"][
-                                    "@extension"
-                                ]
-                                # Return the first match
-                                return application_number
-                except:
-                    # No matching data in this component, so move on.
-                    pass
+            components = bs_content.document.component.structuredbody.component
+            for item in components.find_all("approval"):
+                if hasattr(item, "code") and item.code["displayname"] == "NDA":
+                    # Capture the corresponding NDA number
+                    application_numbers.add(item.id["extension"])
         except Exception as e:
             _logger.error(
-                f"Error in __get_application_number for set ID {set_id}: {e}"
+                f"Error in __get_application_numbers for set ID {set_id}: {e}"
             )
-        return ""
+        return list(application_numbers)
+
+    def __get_label_text(self, set_id, bs_content):
+        titles = bs_content.find_all("title")
+        labels = []
+
+        for title in titles:
+            if isinstance(title, Tag):
+                for section_title in SplHistoricalLabels.LABEL_SECTIONS:
+                    if section_title in title.text:
+                        # Process the label text
+                        labels.append(
+                            {
+                                "name": section_title,
+                                "text": re.sub(
+                                    r"\n{3,}", "\n\n", title.parent.get_text()
+                                ),
+                            }
+                        )
+
+        return labels
 
 
 def process_labels_for_set_id(set_id_history):
     labels = SplHistoricalLabels(
         spl=set_id_history, download_path=set_id_history["download_path"]
     )
+    if labels.nda_found:
+        # Upsert to MongoDB
+        for label in labels.spl_label_versions:
+            _mongo_client.upsert(
+                MONGO_COLLECTION_NAME,
+                {"spl_id": label["spl_id"], "set_id": label["set_id"]},
+                label,
+            )
+        return True
+    return False
 
 
 def process_historical_labels(all_setid_history, download_path):
     """
     Fetches the detailed label text for all spl versions of the set_id.
-    If any version of a given set_id has an association with an NDA number,
-    the data will be processed further and saved to MongoDB.
+    If any version of a given set_id has an association with one or more
+    NDA numbers, the data will be processed further and saved to MongoDB.
 
     Args:
         all_setid_history (list[dict]): A list of history records for a set_id
