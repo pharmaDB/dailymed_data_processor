@@ -8,9 +8,14 @@ import zipfile
 from bs4 import BeautifulSoup as bs, Tag
 import requests
 
+from db.mongo import connect_mongo, MongoClient
 from utils.logging import getLogger
 
 _logger = getLogger(__name__)
+
+_mongo_client = MongoClient(connect_mongo())
+
+MONGO_COLLECTION_NAME = "labels"
 
 
 class SplHistoricalLabels:
@@ -182,8 +187,15 @@ def process_labels_for_set_id(set_id_history):
         spl=set_id_history, download_path=set_id_history["download_path"]
     )
     if labels.nda_found:
-        # Save to MongoDB
-        pass
+        # Upsert to MongoDB
+        for label in labels.spl_label_versions:
+            _mongo_client.upsert(
+                MONGO_COLLECTION_NAME,
+                {"spl_id": label["spl_id"], "set_id": label["set_id"]},
+                label,
+            )
+        return True
+    return False
 
 
 def process_historical_labels(all_setid_history, download_path):
