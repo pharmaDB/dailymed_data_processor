@@ -48,7 +48,7 @@ class SplIndexFile:
             self.metadata = dict_data["spls"]["metadata"]
             self.spls = dict_data["spls"]["spl"]
         except Exception as e:
-            _logger.error(f"Unable to parse XML data from file {self.filepath}")
+            _logger.error(f"Unable to parse XML data from file")
 
 
 def get_spls(page_num):
@@ -56,7 +56,8 @@ def get_spls(page_num):
 
 
 def process_paginated_index(start_page, num_pages=None):
-    """Fetches index pages in the applicable range, from start_page.
+    """
+    Fetches index pages in the applicable range, from start_page.
 
     Args:
         start_page (int): the page number from which to start downloading the SPL index
@@ -104,7 +105,7 @@ def process_paginated_index(start_page, num_pages=None):
             page_nums,
             executor.map(get_spls, page_nums),
         ):
-            _logger.info(f"Processed page {page_num}")
+            _logger.info(f"Processed index page {page_num}")
             all_spls.extend(spls)
 
     # Return all the spls from the index and the last page number downloaded
