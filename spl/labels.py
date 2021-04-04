@@ -35,9 +35,10 @@ class SplHistoricalLabels:
         "INDICATIONS AND USAGE",
         "DOSAGE AND ADMINISTRATION",
         "DOSAGE FORMS AND STRENGTHS",
-        "CONTRAINDICATIONS",
-        "WARNINGS AND PRECAUTIONS",
-        "ADVERSE REACTIONS",
+        "USE IN SPECIFIC POPULATIONS",
+        "DESCRIPTION",
+        "CLINICAL PHARMACOLOGY",
+        "CLINICAL STUDIES",
     )
 
     def __init__(self, spl, download_path):
