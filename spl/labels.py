@@ -124,9 +124,9 @@ class SplHistoricalLabels:
     def __process_label(self, xml_file_name):
         """
         Processes the data in the given file name, extracting the required data
-        and saving them to the spl_label_versions attribute. Also checks for the
-        presence of an NDA association in the label data and sets the nda_found
-        flag to True, if found.
+        and saving them to the spl_label_versions attribute. Also checks for
+        the presence of an NDA association in the label data and sets the
+        nda_found flag to True, if found.
 
         Args:
             file_name (str): the full name (inclusive of the absolute path) of
@@ -153,9 +153,7 @@ class SplHistoricalLabels:
                         "set_id": set_id,
                         "spl_id": Path(xml_file_name).name[:-4],
                         "spl_version": self.__get_spl_version(bs_content),
-                        "published_date": self.__get_published_date(
-                            bs_content
-                        ),
+                        "published_date": self.__get_published_date(bs_content),
                         "sections": self.__get_label_text(set_id, bs_content),
                     }
                 )
