@@ -5,7 +5,7 @@ import re
 import shutil
 import zipfile
 
-from bs4 import BeautifulSoup as bs, Tag
+from bs4 import BeautifulSoup as bs, Tag, NavigableString
 import requests
 
 from db.mongo import connect_mongo, MongoClient
@@ -31,44 +31,74 @@ class SplHistoricalLabels:
     """
 
     BASE_URL = "https://dailymed.nlm.nih.gov/dailymed/getFile.cfm?type=zip"
-    LABEL_SECTIONS = {
-        "INDICATIONS AND USAGE": [],
-        "DOSAGE AND ADMINISTRATION": [
-            "Important Administration Instructions",
-            "Recommended Dosage in Rheumatoid Arthritis and Psoriatic Arthritis",
-            "Recommended Dosage in Ulcerative Colitis",
-            "Recommended Dosage in Polyarticular Course Juvenile Idiopathic Arthritis",
-        ],
-        "DOSAGE FORMS AND STRENGTHS": [],
-        "USE IN SPECIFIC POPULATIONS": [
-            "Pregnancy",
-            "Lactation",
-            "Females and Males of Reproductive Potential",
-            "Pediatric Use",
-            "Geriatric Use",
-            "Use in Diabetics",
-            "Renal Impairment",
-            "Hepatic Impairment",
-        ],
-        "DESCRIPTION": [],
-        "CLINICAL PHARMACOLOGY": [
-            "Mechanism of Action",
-            "Pharmacodynamics",
-            "Pharmacokinetics",
-        ],
-        "CLINICAL STUDIES": [
-            "Rheumatoid Arthritis",
-            "Psoriatic Arthritis",
-            "Ulcerative Colitis",
-            "Polyarticular Course Juvenile Idiopathic Arthritis",
-        ],
-    }
+
+    # LABEL_SECTIONS includes titles of interest and their variants
+    # LABEL_SECTIONS does not include subtitles.  Subtitles are identified by
+    # __get_label_text(), since they differ from label to label.  Compare 'USE
+    # IN SPECIFIC POPULATION' from example 2 to the subtitle list supplied by
+    # customer that is included in the key value pair of LABEL_SECTIONS.
+
+    # Example of title/subtitle variants include:
+    # 1. https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=762b51be-1893-4cd1-9511-e645fc420d3a&version=1
+    # 2. https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=762b51be-1893-4cd1-9511-e645fc420d3a&version=6
+    # 3. view-source:https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=762b51be-1893-4cd1-9511-e645fc420d3a&version=13
+
+    # As further note:
+    # https://dailymed.nlm.nih.gov/dailymed/lookup.cfm is not entirely comprehensive
+
+    # LABEL_SECTIONS = {
+    #     "INDICATIONS AND USAGE": [],
+    #     "DOSAGE AND ADMINISTRATION": [
+    #         "Important Administration Instructions",
+    #         "Recommended Dosage in Rheumatoid Arthritis and Psoriatic Arthritis",
+    #         "Recommended Dosage in Ulcerative Colitis",
+    #         "Recommended Dosage in Polyarticular Course Juvenile Idiopathic Arthritis",
+    #     ],
+    #     "DOSAGE FORMS AND STRENGTHS": [],
+    #     "USE IN SPECIFIC POPULATIONS": [
+    #         "Pregnancy",
+    #         "Lactation",
+    #         "Females and Males of Reproductive Potential",
+    #         "Pediatric Use",
+    #         "Geriatric Use",
+    #         "Use in Diabetics",
+    #         "Renal Impairment",
+    #         "Hepatic Impairment",
+    #     ],
+    #     "DESCRIPTION": [],
+    #     "CLINICAL PHARMACOLOGY": [
+    #         "Mechanism of Action",
+    #         "Pharmacodynamics",
+    #         "Pharmacokinetics",
+    #     ],
+    #     "CLINICAL STUDIES": [
+    #         "Rheumatoid Arthritis",
+    #         "Psoriatic Arthritis",
+    #         "Ulcerative Colitis",
+    #         "Polyarticular Course Juvenile Idiopathic Arthritis",
+    #     ],
+    #     # the following are taken from example 1 above
+    #     "CLINICAL TRIALS": [],
+    #     "INDICATIONS": [],
+    # }
+
+    LABEL_SECTIONS = [
+        "INDICATIONS AND USAGE",
+        "DOSAGE AND ADMINISTRATION",
+        "DOSAGE FORMS AND STRENGTHS",
+        "USE IN SPECIFIC POPULATIONS",
+        "DESCRIPTION",
+        "CLINICAL PHARMACOLOGY",
+        "CLINICAL STUDIES",
+        # the following are taken from example 1 above
+        "CLINICAL TRIALS",
+        "INDICATIONS",
+    ]
 
     def __init__(self, spl, download_path):
         if not isinstance(spl, dict):
             raise ValueError(
-                "Expected spl data to a dict with the history data"
-            )
+                "Expected spl data to a dict with the history data")
         if download_path is None:
             raise ValueError("Download path is not defined")
         if not os.path.exists(download_path):
@@ -78,8 +108,7 @@ class SplHistoricalLabels:
         try:
             self.set_id = spl["data"]["spl"]["setid"]
             self.spl_versions = list(
-                map(lambda x: x["spl_version"], spl["data"]["history"])
-            )
+                map(lambda x: x["spl_version"], spl["data"]["history"]))
         except Exception as e:
             raise ValueError(f"Bad SPL data passed to SplLabelFile: {e}")
         # Attributes to store processed data
@@ -96,9 +125,8 @@ class SplHistoricalLabels:
         """
         for version in self.spl_versions:
             url = f"{SplHistoricalLabels.BASE_URL}&setid={self.set_id}&version={version}"
-            folder_path = os.path.join(
-                self.download_path, f"{self.set_id}_{version}"
-            )
+            folder_path = os.path.join(self.download_path,
+                                       f"{self.set_id}_{version}")
             if not os.path.exists(folder_path):
                 os.mkdir(folder_path)
             file_path = os.path.join(folder_path, "zipfile.zip")
@@ -146,21 +174,24 @@ class SplHistoricalLabels:
                 set_id = bs_content.document.setid["root"]
                 # Get Application Number
                 application_numbers = self.__get_application_numbers(
-                    set_id, bs_content
-                )
+                    set_id, bs_content)
                 if application_numbers:
                     self.nda_found = True
                 # Get other required properties and make label version data
-                self.spl_label_versions.append(
-                    {
-                        "application_numbers": application_numbers,
-                        "set_id": set_id,
-                        "spl_id": Path(xml_file_name).name[:-4],
-                        "spl_version": self.__get_spl_version(bs_content),
-                        "published_date": self.__get_published_date(bs_content),
-                        "sections": self.__get_label_text(set_id, bs_content),
-                    }
-                )
+                self.spl_label_versions.append({
+                    "application_numbers":
+                    application_numbers,
+                    "set_id":
+                    set_id,
+                    "spl_id":
+                    Path(xml_file_name).name[:-4],
+                    "spl_version":
+                    self.__get_spl_version(bs_content),
+                    "published_date":
+                    self.__get_published_date(bs_content),
+                    "sections":
+                    self.__get_label_text(set_id, bs_content),
+                })
         except Exception as e:
             _logger.error(f"Unable to parse XML data from file: {e}")
 
@@ -181,73 +212,106 @@ class SplHistoricalLabels:
                     application_numbers.add(item.id["extension"])
         except Exception as e:
             _logger.error(
-                f"Error in __get_application_numbers for set ID {set_id}: {e}"
-            )
+                f"Error in __get_application_numbers for set ID {set_id}: {e}")
         return list(application_numbers)
 
     def __get_label_text(self, set_id, bs_content):
-        def get_xml_text(navigable_title):
-            # Process the label text
-            label_text = (
-                re.sub(r"\n{3,}", "\n\n", navigable_title.get_text())
-                # Remove initial / trailing white space
-                .lstrip().rstrip()
-            )
-            return label_text
+        # def get_xml_text(navigable_title):
+        #     # Process the label text
+        #     label_text = (
+        #         re.sub(r"\n{3,}", "\n\n", navigable_title.get_text())
+        #         # Remove initial / trailing white space
+        #         .lstrip().rstrip())
+        #     return label_text
 
         # Get and process all "title" tags
         titles = bs_content.find_all("title")
         labels = []
 
-        for title in titles:
-            if isinstance(title, Tag):
-                for section_title in SplHistoricalLabels.LABEL_SECTIONS:
-                    if section_title in title.text:
-                        # Match the title tags in the sub-section
-                        sub_titles = title.parent.find_all("title")
-                        sub_sections = []
-                        for sub_title in sub_titles:
-                            if isinstance(sub_title, Tag):
-                                for (
-                                    sub_section_title
-                                ) in SplHistoricalLabels.LABEL_SECTIONS[
-                                    section_title
-                                ]:
-                                    if sub_section_title in sub_title.text:
-                                        # Extract the sub-title text
-                                        sub_sections.append(
-                                            {
-                                                "name": sub_section_title,
-                                                "text": get_xml_text(
-                                                    sub_title.parent
-                                                ),
-                                            }
-                                        )
-                                        # Remove the sub title from the main title
-                                        sub_title.parent.decompose()
+        # for title in titles:
+        #     if isinstance(title, Tag):
+        #         for section_title in SplHistoricalLabels.LABEL_SECTIONS:
+        #             if section_title in title.text:
+        #                 # Match the title tags in the sub-section
+        #                 sub_titles = title.parent.find_all("title")
+        #                 sub_sections = []
+        #                 for sub_title in sub_titles:
+        #                     if isinstance(sub_title, Tag):
+        #                         for (sub_section_title
+        #                              ) in SplHistoricalLabels.LABEL_SECTIONS[
+        #                                  section_title]:
+        #                             if sub_section_title in sub_title.text:
+        #                                 # Extract the sub-title text
+        #                                 sub_sections.append({
+        #                                     "name":
+        #                                     sub_section_title,
+        #                                     "text":
+        #                                     get_xml_text(sub_title.parent),
+        #                                 })
+        #                                 # Remove the sub title from the main title
+        #                                 sub_title.parent.decompose()
 
-                        # Add the section text, along with the sub-sections
-                        labels.append(
-                            {
-                                "name": section_title,
-                                "text": get_xml_text(title.parent),
-                                "sub_sections": sub_sections,
-                            }
-                        )
+        #                 # Add the section text, along with the sub-sections
+        #                 labels.append({
+        #                     "name": section_title,
+        #                     "text": get_xml_text(title.parent),
+        #                     "sub_sections": sub_sections,
+        #                 })
+        #
 
+        def get_xml_text(text):
+            # Process the label text
+            text = text.lstrip().rstrip()
+            return text
+
+        i = 0
+        while i < len(titles):
+            title = titles[i]
+            # if any substring of title is in LABEL_SECTION
+            if title.string and any(
+                    label_section.lower() in title.string.lower()
+                    for label_section in SplHistoricalLabels.LABEL_SECTIONS):
+                subtitles = title.parent.find_all('title')
+                if len(subtitles) > 1:
+                    # if title has subtitles, add title with no text to label
+                    labels.append({
+                        "name": get_xml_text(title.text),
+                        "text": ""
+                    })
+                    # loop through all subtitles and add subtitle and text
+                    for j in range(1, len(subtitles)):
+                        title = titles[i + j]
+                        labels.append({
+                            "name":
+                            get_xml_text(title.string),
+                            "text":
+                            get_xml_text(title.parent.find("text").text)
+                        })
+                    i = i + len(subtitles)
+                else:
+                    # for case of no subtitles
+                    labels.append({
+                        "name":
+                        get_xml_text(title.string),
+                        "text":
+                        get_xml_text(title.parent.find("text").text)
+                    })
+            i += 1
         return labels
 
 
 def process_labels_for_set_id(set_id_history):
-    labels = SplHistoricalLabels(
-        spl=set_id_history, download_path=set_id_history["download_path"]
-    )
+    labels = SplHistoricalLabels(spl=set_id_history,
+                                 download_path=set_id_history["download_path"])
     if labels.nda_found:
         # Upsert to MongoDB
         for label in labels.spl_label_versions:
             _mongo_client.upsert(
                 MONGO_COLLECTION_NAME,
-                {"spl_id": label["spl_id"], "set_id": label["set_id"]},
+                {
+                    "spl_id": label["spl_id"],
+                    "set_id": label["set_id"]
+                },
                 label,
             )
         return True
@@ -278,11 +342,11 @@ def process_historical_labels(all_setid_history, download_path):
     # Process each set_id's historical label data in parallel
     with concurrent.futures.ProcessPoolExecutor() as executor:
         for set_id_history, _ in zip(
-            all_setid_history,
-            executor.map(
-                process_labels_for_set_id,
                 all_setid_history,
-            ),
+                executor.map(
+                    process_labels_for_set_id,
+                    all_setid_history,
+                ),
         ):
             set_id = set_id_history["data"]["spl"]["setid"]
             _logger.info(f"Processed labels for set ID {set_id}")

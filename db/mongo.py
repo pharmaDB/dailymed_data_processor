@@ -14,6 +14,8 @@ _config = dict(
 
 
 class MongoClient:
+    db_client=None
+
     def __init__(self, db_client):
         self.db_client = db_client
 
