@@ -7,6 +7,7 @@ import zipfile
 
 from bs4 import BeautifulSoup as bs, Tag, NavigableString
 import requests
+import unicodedata
 
 from db.mongo import connect_mongo, MongoClient
 from utils.logging import getLogger
@@ -227,6 +228,14 @@ class SplHistoricalLabels:
         # Get and process all "title" tags
         titles = bs_content.find_all("title")
         labels = []
+        if set_id=='582f42e5-444e-4246-af8c-e7e28097c69a':
+            # print("titles:",titles)
+            print("")
+            for title in titles:
+                print(title)
+                print('title.string: ', title.string)
+                print('title.text: ', title.text)
+                print('title.get_text()', title.get_text())
 
         # for title in titles:
         #     if isinstance(title, Tag):
@@ -261,15 +270,15 @@ class SplHistoricalLabels:
 
         def get_xml_text(text):
             # Process the label text
-            text = text.lstrip().rstrip()
+            text = unicodedata.normalize('NFKC', text.lstrip().rstrip())
             return text
 
         i = 0
         while i < len(titles):
             title = titles[i]
             # if any substring of title is in LABEL_SECTION
-            if title.string and any(
-                    label_section.lower() in title.string.lower()
+            if any(
+                    label_section.lower() in get_xml_text(title.text).lower()
                     for label_section in SplHistoricalLabels.LABEL_SECTIONS):
                 subtitles = title.parent.find_all('title')
                 if len(subtitles) > 1:
@@ -283,7 +292,7 @@ class SplHistoricalLabels:
                         title = titles[i + j]
                         labels.append({
                             "name":
-                            get_xml_text(title.string),
+                            get_xml_text(title.text),
                             "text":
                             get_xml_text(title.parent.find("text").text)
                         })
@@ -292,7 +301,7 @@ class SplHistoricalLabels:
                     # for case of no subtitles
                     labels.append({
                         "name":
-                        get_xml_text(title.string),
+                        get_xml_text(title.text),
                         "text":
                         get_xml_text(title.parent.find("text").text)
                     })
