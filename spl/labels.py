@@ -47,42 +47,6 @@ class SplHistoricalLabels:
     # As further note:
     # https://dailymed.nlm.nih.gov/dailymed/lookup.cfm is not entirely comprehensive
 
-    # LABEL_SECTIONS = {
-    #     "INDICATIONS AND USAGE": [],
-    #     "DOSAGE AND ADMINISTRATION": [
-    #         "Important Administration Instructions",
-    #         "Recommended Dosage in Rheumatoid Arthritis and Psoriatic Arthritis",
-    #         "Recommended Dosage in Ulcerative Colitis",
-    #         "Recommended Dosage in Polyarticular Course Juvenile Idiopathic Arthritis",
-    #     ],
-    #     "DOSAGE FORMS AND STRENGTHS": [],
-    #     "USE IN SPECIFIC POPULATIONS": [
-    #         "Pregnancy",
-    #         "Lactation",
-    #         "Females and Males of Reproductive Potential",
-    #         "Pediatric Use",
-    #         "Geriatric Use",
-    #         "Use in Diabetics",
-    #         "Renal Impairment",
-    #         "Hepatic Impairment",
-    #     ],
-    #     "DESCRIPTION": [],
-    #     "CLINICAL PHARMACOLOGY": [
-    #         "Mechanism of Action",
-    #         "Pharmacodynamics",
-    #         "Pharmacokinetics",
-    #     ],
-    #     "CLINICAL STUDIES": [
-    #         "Rheumatoid Arthritis",
-    #         "Psoriatic Arthritis",
-    #         "Ulcerative Colitis",
-    #         "Polyarticular Course Juvenile Idiopathic Arthritis",
-    #     ],
-    #     # the following are taken from example 1 above
-    #     "CLINICAL TRIALS": [],
-    #     "INDICATIONS": [],
-    # }
-
     LABEL_SECTIONS = [
         "INDICATIONS AND USAGE",
         "DOSAGE AND ADMINISTRATION",
@@ -217,59 +181,13 @@ class SplHistoricalLabels:
         return list(application_numbers)
 
     def __get_label_text(self, set_id, bs_content):
-        # def get_xml_text(navigable_title):
-        #     # Process the label text
-        #     label_text = (
-        #         re.sub(r"\n{3,}", "\n\n", navigable_title.get_text())
-        #         # Remove initial / trailing white space
-        #         .lstrip().rstrip())
-        #     return label_text
 
         # Get and process all "title" tags
         titles = bs_content.find_all("title")
         labels = []
-        if set_id=='582f42e5-444e-4246-af8c-e7e28097c69a':
-            # print("titles:",titles)
-            print("")
-            for title in titles:
-                print(title)
-                print('title.string: ', title.string)
-                print('title.text: ', title.text)
-                print('title.get_text()', title.get_text())
-
-        # for title in titles:
-        #     if isinstance(title, Tag):
-        #         for section_title in SplHistoricalLabels.LABEL_SECTIONS:
-        #             if section_title in title.text:
-        #                 # Match the title tags in the sub-section
-        #                 sub_titles = title.parent.find_all("title")
-        #                 sub_sections = []
-        #                 for sub_title in sub_titles:
-        #                     if isinstance(sub_title, Tag):
-        #                         for (sub_section_title
-        #                              ) in SplHistoricalLabels.LABEL_SECTIONS[
-        #                                  section_title]:
-        #                             if sub_section_title in sub_title.text:
-        #                                 # Extract the sub-title text
-        #                                 sub_sections.append({
-        #                                     "name":
-        #                                     sub_section_title,
-        #                                     "text":
-        #                                     get_xml_text(sub_title.parent),
-        #                                 })
-        #                                 # Remove the sub title from the main title
-        #                                 sub_title.parent.decompose()
-
-        #                 # Add the section text, along with the sub-sections
-        #                 labels.append({
-        #                     "name": section_title,
-        #                     "text": get_xml_text(title.parent),
-        #                     "sub_sections": sub_sections,
-        #                 })
-        #
 
         def get_xml_text(text):
-            # Process the label text
+            # Process the label text; normalize remove nbsp
             text = unicodedata.normalize('NFKC', text.lstrip().rstrip())
             return text
 
