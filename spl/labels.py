@@ -63,7 +63,8 @@ class SplHistoricalLabels:
     def __init__(self, spl, download_path):
         if not isinstance(spl, dict):
             raise ValueError(
-                "Expected spl data to a dict with the history data")
+                "Expected spl data to a dict with the history data"
+            )
         if download_path is None:
             raise ValueError("Download path is not defined")
         if not os.path.exists(download_path):
@@ -73,7 +74,8 @@ class SplHistoricalLabels:
         try:
             self.set_id = spl["data"]["spl"]["setid"]
             self.spl_versions = list(
-                map(lambda x: x["spl_version"], spl["data"]["history"]))
+                map(lambda x: x["spl_version"], spl["data"]["history"])
+            )
         except Exception as e:
             raise ValueError(f"Bad SPL data passed to SplLabelFile: {e}")
         # Attributes to store processed data
@@ -90,8 +92,9 @@ class SplHistoricalLabels:
         """
         for version in self.spl_versions:
             url = f"{SplHistoricalLabels.BASE_URL}&setid={self.set_id}&version={version}"
-            folder_path = os.path.join(self.download_path,
-                                       f"{self.set_id}_{version}")
+            folder_path = os.path.join(
+                self.download_path, f"{self.set_id}_{version}"
+            )
             if not os.path.exists(folder_path):
                 os.mkdir(folder_path)
             file_path = os.path.join(folder_path, "zipfile.zip")
@@ -139,24 +142,23 @@ class SplHistoricalLabels:
                 set_id = bs_content.document.setid["root"]
                 # Get Application Number
                 application_numbers = self.__get_application_numbers(
-                    set_id, bs_content)
+                    set_id, bs_content
+                )
                 if application_numbers:
                     self.nda_found = True
                 # Get other required properties and make label version data
-                self.spl_label_versions.append({
-                    "application_numbers":
-                    application_numbers,
-                    "set_id":
-                    set_id,
-                    "spl_id":
-                    Path(xml_file_name).name[:-4],
-                    "spl_version":
-                    self.__get_spl_version(bs_content),
-                    "published_date":
-                    self.__get_published_date(bs_content),
-                    "sections":
-                    self.__get_label_text(set_id, bs_content),
-                })
+                self.spl_label_versions.append(
+                    {
+                        "application_numbers": application_numbers,
+                        "set_id": set_id,
+                        "spl_id": Path(xml_file_name).name[:-4],
+                        "spl_version": self.__get_spl_version(bs_content),
+                        "published_date": self.__get_published_date(
+                            bs_content
+                        ),
+                        "sections": self.__get_label_text(set_id, bs_content),
+                    }
+                )
         except Exception as e:
             _logger.error(f"Unable to parse XML data from file: {e}")
 
@@ -177,7 +179,8 @@ class SplHistoricalLabels:
                     application_numbers.add(item.id["extension"])
         except Exception as e:
             _logger.error(
-                f"Error in __get_application_numbers for set ID {set_id}: {e}")
+                f"Error in __get_application_numbers for set ID {set_id}: {e}"
+            )
         return list(application_numbers)
 
     def __get_label_text(self, set_id, bs_content):
@@ -188,7 +191,7 @@ class SplHistoricalLabels:
 
         def get_xml_text(text):
             # Process the label text; normalize remove nbsp
-            text = unicodedata.normalize('NFKC', text.lstrip().rstrip())
+            text = unicodedata.normalize("NFKC", text.lstrip().rstrip())
             return text
 
         i = 0
@@ -196,49 +199,51 @@ class SplHistoricalLabels:
             title = titles[i]
             # if any substring of title is in LABEL_SECTION
             if any(
-                    label_section.lower() in get_xml_text(title.text).lower()
-                    for label_section in SplHistoricalLabels.LABEL_SECTIONS):
-                subtitles = title.parent.find_all('title')
+                label_section.lower() in get_xml_text(title.text).lower()
+                for label_section in SplHistoricalLabels.LABEL_SECTIONS
+            ):
+                subtitles = title.parent.find_all("title")
                 if len(subtitles) > 1:
                     # if title has subtitles, add title with no text to label
-                    labels.append({
-                        "name": get_xml_text(title.text),
-                        "text": ""
-                    })
+                    labels.append(
+                        {"name": get_xml_text(title.text), "text": ""}
+                    )
                     # loop through all subtitles and add subtitle and text
                     for j in range(1, len(subtitles)):
                         title = titles[i + j]
-                        labels.append({
-                            "name":
-                            get_xml_text(title.text),
-                            "text":
-                            get_xml_text(title.parent.find("text").text)
-                        })
+                        labels.append(
+                            {
+                                "name": get_xml_text(title.text),
+                                "text": get_xml_text(
+                                    title.parent.find("text").text
+                                ),
+                            }
+                        )
                     i = i + len(subtitles)
                 else:
                     # for case of no subtitles
-                    labels.append({
-                        "name":
-                        get_xml_text(title.text),
-                        "text":
-                        get_xml_text(title.parent.find("text").text)
-                    })
+                    labels.append(
+                        {
+                            "name": get_xml_text(title.text),
+                            "text": get_xml_text(
+                                title.parent.find("text").text
+                            ),
+                        }
+                    )
             i += 1
         return labels
 
 
 def process_labels_for_set_id(set_id_history):
-    labels = SplHistoricalLabels(spl=set_id_history,
-                                 download_path=set_id_history["download_path"])
+    labels = SplHistoricalLabels(
+        spl=set_id_history, download_path=set_id_history["download_path"]
+    )
     if labels.nda_found:
         # Upsert to MongoDB
         for label in labels.spl_label_versions:
             _mongo_client.upsert(
                 MONGO_COLLECTION_NAME,
-                {
-                    "spl_id": label["spl_id"],
-                    "set_id": label["set_id"]
-                },
+                {"spl_id": label["spl_id"], "set_id": label["set_id"]},
                 label,
             )
         return True
@@ -269,11 +274,11 @@ def process_historical_labels(all_setid_history, download_path):
     # Process each set_id's historical label data in parallel
     with concurrent.futures.ProcessPoolExecutor() as executor:
         for set_id_history, _ in zip(
+            all_setid_history,
+            executor.map(
+                process_labels_for_set_id,
                 all_setid_history,
-                executor.map(
-                    process_labels_for_set_id,
-                    all_setid_history,
-                ),
+            ),
         ):
             set_id = set_id_history["data"]["spl"]["setid"]
             _logger.info(f"Processed labels for set ID {set_id}")
