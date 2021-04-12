@@ -40,17 +40,21 @@ class SplHistoricalLabels:
     # customer that is included in the key value pair of LABEL_SECTIONS.
 
     # Example of title/subtitle variants include:
-    # 1. https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=762b51be-1893-4cd1-9511-e645fc420d3a&version=1
+    # 1. https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=762b51be-1893-4cd1-9511-e645fc420d3a&version=2
     # 2. https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=762b51be-1893-4cd1-9511-e645fc420d3a&version=6
-    # 3. view-source:https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=762b51be-1893-4cd1-9511-e645fc420d3a&version=13
-
+    # 3. https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=762b51be-1893-4cd1-9511-e645fc420d3a&version=13
+    # 4. https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=1b5e2860-6855-4a65-8bbc-e064172a1adf&version=1
+    # 5. https://dailymed.nlm.nih.gov/dailymed/getFile.cfm?type=zip&setid=b5cee013-000f-4e35-a284-1f58add31b4d&version=5
     # As further note:
     # https://dailymed.nlm.nih.gov/dailymed/lookup.cfm is not entirely comprehensive
 
     LABEL_SECTIONS = [
         "INDICATIONS AND USAGE",
+        "INDICATIONS & USAGE",
         "DOSAGE AND ADMINISTRATION",
+        "DOSAGE & ADMINISTRATION",
         "DOSAGE FORMS AND STRENGTHS",
+        "DOSAGE FORMS & STRENGTHS",
         "USE IN SPECIFIC POPULATIONS",
         "DESCRIPTION",
         "CLINICAL PHARMACOLOGY",
@@ -58,6 +62,20 @@ class SplHistoricalLabels:
         # the following are taken from example 1 above
         "CLINICAL TRIALS",
         "INDICATIONS",
+        # the following are taken from example 4 above
+        "Active ingredient",
+        "Inactive ingredients",
+    ]
+
+    LABEL_SECTIONS_EXACT = [
+        # the following are taken from example 4 above
+        "Purpose",
+        "Directions",
+        "Use",
+    ]
+
+    LABEL_SECTIONS_BLACKLIST = [
+        "CONTRAINDICATIONS",
     ]
 
     def __init__(self, spl, download_path):
@@ -182,50 +200,86 @@ class SplHistoricalLabels:
         return list(application_numbers)
 
     def __get_label_text(self, set_id, bs_content):
-
-        # Get and process all "title" tags
-        titles = bs_content.find_all("title")
-        labels = []
-
         def get_xml_text(text):
             # Process the label text; normalize remove nbsp
             text = unicodedata.normalize("NFKC", text.lstrip().rstrip())
             return text
 
+        def get_xml_title(text):
+            # strip extra \n, \t, and spaces in titles, but keep number
+            text = get_xml_text(text)
+            text = re.sub(r"\.\s+", ".", text)
+            text = re.sub(r"\s+", " ", text)
+            return text
+
+        # Get and process all "title" tags
+        titles = bs_content.find_all("title")
+        labels = []
+
         i = 0
         while i < len(titles):
             title = titles[i]
-            # if any substring of title is in LABEL_SECTION
-            if any(
-                label_section.lower() in get_xml_text(title.text).lower()
+            # test if any substring of title is in LABEL_SECTION
+            title_substring_in_LABEL_SECTION = any(
+                label_section.lower() in get_xml_title(title.text).lower()
                 for label_section in SplHistoricalLabels.LABEL_SECTIONS
-            ):
+            )
+
+            # test if any string matches is in LABEL_SECTIONS_EXACT
+            title_string_in_LABEL_SECTION_EXACT = any(
+                label_section.lower() == get_xml_title(title.text).lower()
+                for label_section in SplHistoricalLabels.LABEL_SECTIONS_EXACT
+            )
+
+            # test if any substring is in LABEL_SECTION_BLACKLIST
+            title_substring_in_LABEL_SECTION_BLACKLIST = any(
+                label_section.lower() in get_xml_title(title.text).lower()
+                for label_section in SplHistoricalLabels.LABEL_SECTIONS_BLACKLIST
+            )
+
+            if (
+                title_substring_in_LABEL_SECTION
+                or title_string_in_LABEL_SECTION_EXACT
+            ) and not title_substring_in_LABEL_SECTION_BLACKLIST:
                 subtitles = title.parent.find_all("title")
                 if len(subtitles) > 1:
-                    # if title has subtitles, add title with no text to label
+                    # if title has subtitles, add title with sibling <text>
+                    parent = get_xml_title(title.text)
+                    sibling_text = (
+                        title.find_next_sibling("text").text
+                        if title.find_next_sibling("text")
+                        else ""
+                    )
                     labels.append(
-                        {"name": get_xml_text(title.text), "text": ""}
+                        {
+                            "name": parent,
+                            "text": sibling_text,
+                            "parent": None,
+                        }
                     )
                     # loop through all subtitles and add subtitle and text
                     for j in range(1, len(subtitles)):
                         title = titles[i + j]
                         labels.append(
                             {
-                                "name": get_xml_text(title.text),
+                                "name": get_xml_title(title.text),
                                 "text": get_xml_text(
-                                    title.parent.find("text").text
+                                    title.parent.find("text").text,
                                 ),
+                                "parent": parent,
                             }
                         )
-                    i = i + len(subtitles)
+                    # subtract 1 because subtitles include the title
+                    i = i + len(subtitles) - 1
                 else:
                     # for case of no subtitles
                     labels.append(
                         {
-                            "name": get_xml_text(title.text),
+                            "name": get_xml_title(title.text),
                             "text": get_xml_text(
-                                title.parent.find("text").text
+                                title.parent.find("text").text,
                             ),
+                            "parent": None,
                         }
                     )
             i += 1
