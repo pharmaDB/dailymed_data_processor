@@ -201,6 +201,7 @@ class SplHistoricalLabels:
         def get_xml_text(text):
             # Process the label text; normalize remove nbsp
             text = unicodedata.normalize("NFKC", text.lstrip().rstrip())
+            text = re.sub(r"\n\s*\n", "\n", text)
             return text
 
         def get_xml_title(text):
