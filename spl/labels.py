@@ -35,9 +35,7 @@ class SplHistoricalLabels:
 
     # LABEL_SECTIONS includes titles of interest and their variants
     # LABEL_SECTIONS does not include subtitles.  Subtitles are identified by
-    # __get_label_text(), since they differ from label to label.  Compare 'USE
-    # IN SPECIFIC POPULATION' from example 2 to the subtitle list supplied by
-    # customer that is included in the key value pair of LABEL_SECTIONS.
+    # __get_label_text(), since they differ from label to label.
 
     # Example of title/subtitle variants include:
     # 1. https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=762b51be-1893-4cd1-9511-e645fc420d3a&version=2
