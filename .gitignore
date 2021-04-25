@@ -7,3 +7,6 @@ __pycache__/
 
 # Temp data folder
 tempdata/
+
+# Others
+Pipefile.lock

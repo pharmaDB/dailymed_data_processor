@@ -5,8 +5,10 @@ import re
 import shutil
 import zipfile
 
-from bs4 import BeautifulSoup as bs, Tag
+from bs4 import BeautifulSoup as bs, Tag, NavigableString
+import cleantext
 import requests
+import unicodedata
 
 from db.mongo import connect_mongo, MongoClient
 from utils.logging import getLogger
@@ -31,38 +33,39 @@ class SplHistoricalLabels:
     """
 
     BASE_URL = "https://dailymed.nlm.nih.gov/dailymed/getFile.cfm?type=zip"
-    LABEL_SECTIONS = {
-        "INDICATIONS AND USAGE": [],
-        "DOSAGE AND ADMINISTRATION": [
-            "Important Administration Instructions",
-            "Recommended Dosage in Rheumatoid Arthritis and Psoriatic Arthritis",
-            "Recommended Dosage in Ulcerative Colitis",
-            "Recommended Dosage in Polyarticular Course Juvenile Idiopathic Arthritis",
-        ],
-        "DOSAGE FORMS AND STRENGTHS": [],
-        "USE IN SPECIFIC POPULATIONS": [
-            "Pregnancy",
-            "Lactation",
-            "Females and Males of Reproductive Potential",
-            "Pediatric Use",
-            "Geriatric Use",
-            "Use in Diabetics",
-            "Renal Impairment",
-            "Hepatic Impairment",
-        ],
-        "DESCRIPTION": [],
-        "CLINICAL PHARMACOLOGY": [
-            "Mechanism of Action",
-            "Pharmacodynamics",
-            "Pharmacokinetics",
-        ],
-        "CLINICAL STUDIES": [
-            "Rheumatoid Arthritis",
-            "Psoriatic Arthritis",
-            "Ulcerative Colitis",
-            "Polyarticular Course Juvenile Idiopathic Arthritis",
-        ],
-    }
+
+    # LABEL_SECTIONS includes titles of interest and their variants
+    # LABEL_SECTIONS does not include subtitles. Subtitles are identified by
+    # __get_label_text(), since they differ from label to label.
+    #
+    # Example of title/subtitle variants include:
+    # 1. https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=762b51be-1893-4cd1-9511-e645fc420d3a&version=2
+    # 2. https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=762b51be-1893-4cd1-9511-e645fc420d3a&version=6
+    # 3. https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=762b51be-1893-4cd1-9511-e645fc420d3a&version=13
+    # 4. https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=1b5e2860-6855-4a65-8bbc-e064172a1adf&version=1
+    # 5. https://dailymed.nlm.nih.gov/dailymed/getFile.cfm?type=zip&setid=762b51be-1893-4cd1-9511-e645fc420d3a&version=14
+    #
+    # As further note:
+    # https://dailymed.nlm.nih.gov/dailymed/lookup.cfm is not entirely comprehensive
+
+    LABEL_SECTIONS = [
+        "INDICATIONS AND USAGE",
+        "DOSAGE AND ADMINISTRATION",
+        "DOSAGE FORMS AND STRENGTHS",
+        "USE IN SPECIFIC POPULATIONS",
+        "DESCRIPTION",
+        "CLINICAL PHARMACOLOGY",
+        "CLINICAL STUDIES",
+        # the following are taken from example 1 above
+        "CLINICAL TRIALS",
+        "INDICATIONS",
+        # the following are taken from example 4 above
+        "ACTIVE INGREDIENT",
+        "INACTIVE INGREDIENTS",
+        "PURPOSE",
+        "DIRECTIONS",
+        "USE",
+    ]
 
     def __init__(self, spl, download_path):
         if not isinstance(spl, dict):
@@ -128,9 +131,9 @@ class SplHistoricalLabels:
     def __process_label(self, xml_file_name):
         """
         Processes the data in the given file name, extracting the required data
-        and saving them to the spl_label_versions attribute. Also checks for the
-        presence of an NDA association in the label data and sets the nda_found
-        flag to True, if found.
+        and saving them to the spl_label_versions attribute. Also checks for
+        the presence of an NDA association in the label data and sets the
+        nda_found flag to True, if found.
 
         Args:
             file_name (str): the full name (inclusive of the absolute path) of
@@ -186,55 +189,83 @@ class SplHistoricalLabels:
         return list(application_numbers)
 
     def __get_label_text(self, set_id, bs_content):
-        def get_xml_text(navigable_title):
-            # Process the label text
-            label_text = (
-                re.sub(r"\n{3,}", "\n\n", navigable_title.get_text())
-                # Remove initial / trailing white space
-                .lstrip().rstrip()
-            )
-            return label_text
+        def get_xml_text(text):
+            # Process the label text; normalize remove nbsp
+            text = unicodedata.normalize("NFKC", text.lstrip().rstrip())
+            text = re.sub(r"\n\s*\n", "\n", text)
+            return text
+
+        def get_xml_title(text):
+            # strip extra \n, \t, and spaces in titles, but keep number
+            text = get_xml_text(text)
+            text = re.sub(r"\.\s+", ".", text)
+            text = re.sub(r"\s+", " ", text)
+            return text
 
         # Get and process all "title" tags
         titles = bs_content.find_all("title")
         labels = []
 
         for title in titles:
-            if isinstance(title, Tag):
-                for section_title in SplHistoricalLabels.LABEL_SECTIONS:
-                    if section_title in title.text:
-                        # Match the title tags in the sub-section
-                        sub_titles = title.parent.find_all("title")
-                        sub_sections = []
-                        for sub_title in sub_titles:
-                            if isinstance(sub_title, Tag):
-                                for (
-                                    sub_section_title
-                                ) in SplHistoricalLabels.LABEL_SECTIONS[
-                                    section_title
-                                ]:
-                                    if sub_section_title in sub_title.text:
-                                        # Extract the sub-title text
-                                        sub_sections.append(
-                                            {
-                                                "name": sub_section_title,
-                                                "text": get_xml_text(
-                                                    sub_title.parent
-                                                ),
-                                            }
-                                        )
-                                        # Remove the sub title from the main title
-                                        sub_title.parent.decompose()
+            # For matching:
+            # * Convert title text to upper case
+            # * Replace & with AND, tab with space
+            # * Clean up Unicode characters, digits, punctuation
+            title_match_text = cleantext.clean(
+                title.text.upper().replace("&", "AND").replace("\t", " "),
+                lower=False,
+                no_line_breaks=True,
+                no_punct=True,
+                no_numbers=True,
+                no_digits=True,
+                replace_with_number="",
+                replace_with_digit="",
+            )
 
-                        # Add the section text, along with the sub-sections
-                        labels.append(
-                            {
-                                "name": section_title,
-                                "text": get_xml_text(title.parent),
-                                "sub_sections": sub_sections,
-                            }
+            # Exact match against label section titles
+            if title_match_text in SplHistoricalLabels.LABEL_SECTIONS:
+                title_name, title_text = get_xml_title(
+                    title.text
+                ), get_xml_text(
+                    title.parent.find("text").text,
+                )
+                # Get sub-sections of the label
+                subtitles = title.parent.find_all("title")
+                sub_section_labels = []
+
+                # The first match is the title itself, so check len > 1
+                if len(subtitles) > 1:
+                    # Make sub-section labels list
+                    sub_section_labels = list(
+                        map(
+                            lambda x: {
+                                "name": get_xml_title(x.text),
+                                "text": get_xml_text(
+                                    x.parent.find("text").text,
+                                ),
+                                "parent": title_name,
+                            },
+                            subtitles[1:],
                         )
+                    )
+                    # Replace title text with sibling text if there are sub-sections
+                    title_text = (
+                        title.find_next_sibling("text").text
+                        if title.find_next_sibling("text")
+                        else ""
+                    )
 
+                # Add the section info and sub-sections to the labels list
+                labels.extend(
+                    [
+                        {
+                            "name": title_name,
+                            "text": title_text,
+                            "parent": None,
+                        }
+                    ]
+                    + sub_section_labels
+                )
         return labels
 
 
