@@ -181,7 +181,12 @@ class SplHistoricalLabels:
             for item in components.find_all("approval"):
                 if hasattr(item, "code") and item.code["displayname"] == "NDA":
                     # Capture the corresponding NDA number
-                    application_numbers.add(item.id["extension"])
+                    appln_num = (
+                        item.id["extension"][3:]
+                        if item.id["extension"].startswith("NDA")
+                        else item.id["extension"]
+                    )
+                    application_numbers.add("NDA" + appln_num.zfill(6))
         except Exception as e:
             _logger.error(
                 f"Error in __get_application_numbers for set ID {set_id}: {e}"
