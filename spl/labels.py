@@ -165,7 +165,7 @@ class SplHistoricalLabels:
                         "generic_name": self.__get_generic_name(
                             set_id, bs_content
                         ),
-                        "active_ingredients": self.__get_active_ingredients(
+                        "active_ingredient": self.__get_active_ingredient(
                             set_id, bs_content
                         ),
                         "sections": self.__get_label_text(set_id, bs_content),
@@ -234,42 +234,22 @@ class SplHistoricalLabels:
             )
         return generic_name
 
-    def __get_active_ingredients(self, set_id, bs_content):
-        active_ingredients = set()
+    def __get_active_ingredient(self, set_id, bs_content):
+        active_ingredient = ""
         try:
-            product = (
+            active_ingredient = (
                 bs_content.document.component.structuredbody.component.find(
                     "manufacturedproduct"
                 )
+                .find("activemoiety")
+                .find("name")
+                .text.replace("\n", "")
             )
-            if product.find("manufacturedproduct"):
-                ingredients = product.manufacturedproduct.find_all("ingredient")
-                active_ingredients = set(
-                    map(
-                        lambda x: x.ingredientsubstance.find(
-                            "name"
-                        ).text.replace("\n", ""),
-                        ingredients,
-                    )
-                )
-            else:
-                # Legacy format
-                ingredients = product.manufacturedmedicine.find_all(
-                    "activeingredient"
-                )
-                active_ingredients = set(
-                    map(
-                        lambda x: x.activeingredientsubstance.find(
-                            "name"
-                        ).text.replace("\n", ""),
-                        ingredients,
-                    )
-                )
         except Exception as e:
             _logger.error(
-                f"Error in __get_active_ingredients for set ID {set_id}: {e}"
+                f"Error in __get_active_ingredient for set ID {set_id}: {e}"
             )
-        return list(active_ingredients)
+        return active_ingredient
 
     def __get_label_text(self, set_id, bs_content):
         def get_xml_text(text):
