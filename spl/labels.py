@@ -161,6 +161,13 @@ class SplHistoricalLabels:
                         "spl_id": Path(xml_file_name).name[:-4],
                         "spl_version": self.__get_spl_version(bs_content),
                         "published_date": self.__get_published_date(bs_content),
+                        "name": self.__get_drug_name(set_id, bs_content),
+                        "generic_name": self.__get_generic_name(
+                            set_id, bs_content
+                        ),
+                        "active_ingredients": self.__get_active_ingredients(
+                            set_id, bs_content
+                        ),
                         "sections": self.__get_label_text(set_id, bs_content),
                     }
                 )
@@ -193,6 +200,77 @@ class SplHistoricalLabels:
             )
         return list(application_numbers)
 
+    def __get_drug_name(self, set_id, bs_content):
+        drug_name = ""
+        try:
+            product = (
+                bs_content.document.component.structuredbody.component.find(
+                    "manufacturedproduct"
+                )
+            )
+            if product.find("manufacturedproduct"):
+                product = product.manufacturedproduct
+            else:
+                # Legacy format
+                product = product.manufacturedmedicine
+            drug_name = product.find("name").text.replace("\n", "")
+        except Exception as e:
+            _logger.error(f"Error in __get_drug_name for set ID {set_id}: {e}")
+        return drug_name
+
+    def __get_generic_name(self, set_id, bs_content):
+        generic_name = ""
+        try:
+            generic_name = (
+                bs_content.document.component.structuredbody.component.find(
+                    "manufacturedproduct"
+                )
+                .asentitywithgeneric.genericmedicine.find("name")
+                .text.replace("\n", "")
+            )
+        except Exception as e:
+            _logger.error(
+                f"Error in __get_generic_name for set ID {set_id}: {e}"
+            )
+        return generic_name
+
+    def __get_active_ingredients(self, set_id, bs_content):
+        active_ingredients = set()
+        try:
+            product = (
+                bs_content.document.component.structuredbody.component.find(
+                    "manufacturedproduct"
+                )
+            )
+            if product.find("manufacturedproduct"):
+                ingredients = product.manufacturedproduct.find_all("ingredient")
+                active_ingredients = set(
+                    map(
+                        lambda x: x.ingredientsubstance.find(
+                            "name"
+                        ).text.replace("\n", ""),
+                        ingredients,
+                    )
+                )
+            else:
+                # Legacy format
+                ingredients = product.manufacturedmedicine.find_all(
+                    "activeingredient"
+                )
+                active_ingredients = set(
+                    map(
+                        lambda x: x.activeingredientsubstance.find(
+                            "name"
+                        ).text.replace("\n", ""),
+                        ingredients,
+                    )
+                )
+        except Exception as e:
+            _logger.error(
+                f"Error in __get_active_ingredients for set ID {set_id}: {e}"
+            )
+        return list(active_ingredients)
+
     def __get_label_text(self, set_id, bs_content):
         def get_xml_text(text):
             # Process the label text; normalize remove nbsp
@@ -213,9 +291,9 @@ class SplHistoricalLabels:
 
         for title in titles:
             # For matching:
-            # * Convert title text to upper case
-            # * Replace & with AND, tab with space
-            # * Clean up Unicode characters, digits, punctuation
+            # - Convert title text to upper case
+            # - Replace & with AND, tab with space
+            # - Clean up Unicode characters, digits, punctuation
             title_match_text = cleantext.clean(
                 title.text.upper().replace("&", "AND").replace("\t", " "),
                 lower=False,
