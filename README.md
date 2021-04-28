@@ -3,6 +3,10 @@ Scripts to download in bulk and process the drug labels data from DailyMed.
 
 For a given SPL index start page and number of pages of the index to process (or) a pre-configured list of DailyMed Set IDs, the scripts parse and obtain the historical set id data and label data for each SPL version. If at least one version of a label set has an association to an NDA application number, the processed labels from the Set ID are saved to MongoDB.
 
+## Data Schema
+
+![Label Schema](./assets/label_data.png)
+
 ## MongoDB Set Up
 The connection info for the Mongo DB instance is set in the `.env` file. This should work for a standard MongoDB set up on localhost. If using a different set of DB configs, this file must be updated.
 
