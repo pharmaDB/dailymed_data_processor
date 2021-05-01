@@ -336,7 +336,18 @@ class SplHistoricalLabels:
                     ]
                     + sub_section_labels
                 )
-        return labels
+
+        # If there are sub-sections without titles, collapse them into the
+        # previous sub-section
+        corrected_labels = []
+        for item in labels:
+            if item["name"]:
+                corrected_labels.append(item)
+            elif corrected_labels and item["text"]:
+                # Append label text to the last item in the corrected list
+                corrected_labels[-1]["text"] += "\n" + item["text"]
+
+        return corrected_labels
 
 
 def process_labels_for_set_id(set_id_history):
