@@ -86,7 +86,7 @@ class SplHistoricalLabels:
         except Exception as e:
             raise ValueError(f"Bad SPL data passed to SplLabelFile: {e}")
         # Attributes to store processed data
-        self.nda_found = False
+        self.application_numbers_for_setid = set()
         self.spl_label_versions = []
         # Process
         self.__fetch_and_process()
@@ -95,7 +95,8 @@ class SplHistoricalLabels:
         """
         Fetches the spl version label data and processes it. The parsed data is
         stored in the spl_label_versions attribute. If any version has an
-        association with an NDA number, nda_found is set to True.
+        association with an NDA number, the number is added to
+        application_numbers_for_setid.
         """
         for version in self.spl_versions:
             url = f"{SplHistoricalLabels.BASE_URL}&setid={self.set_id}&version={version}"
@@ -132,8 +133,8 @@ class SplHistoricalLabels:
         """
         Processes the data in the given file name, extracting the required data
         and saving them to the spl_label_versions attribute. Also checks for
-        the presence of an NDA association in the label data and sets the
-        nda_found flag to True, if found.
+        the presence of an NDA association in the label data and appends the
+        application numbers to the application_numbers_for_setid attribute.
 
         Args:
             file_name (str): the full name (inclusive of the absolute path) of
@@ -152,7 +153,12 @@ class SplHistoricalLabels:
                     set_id, bs_content
                 )
                 if application_numbers:
-                    self.nda_found = True
+                    # Add to NDA numbers for the set
+                    self.application_numbers_for_setid = (
+                        self.application_numbers_for_setid.union(
+                            set(application_numbers)
+                        )
+                    )
                 # Get other required properties and make label version data
                 self.spl_label_versions.append(
                     {
@@ -187,13 +193,14 @@ class SplHistoricalLabels:
             components = bs_content.document.component.structuredbody.component
             for item in components.find_all("approval"):
                 if hasattr(item, "code") and item.code["displayname"] == "NDA":
-                    # Capture the corresponding NDA number
+                    # Capture the corresponding NDA number, without the "NDA" prefix and
+                    # without leading zeros
                     appln_num = (
                         item.id["extension"][3:]
                         if item.id["extension"].startswith("NDA")
                         else item.id["extension"]
                     )
-                    application_numbers.add("NDA" + appln_num.zfill(6))
+                    application_numbers.add(str(int(appln_num)))
         except Exception as e:
             _logger.error(
                 f"Error in __get_application_numbers for set ID {set_id}: {e}"
@@ -336,9 +343,14 @@ def process_labels_for_set_id(set_id_history):
     labels = SplHistoricalLabels(
         spl=set_id_history, download_path=set_id_history["download_path"]
     )
-    if labels.nda_found:
+    if labels.application_numbers_for_setid:
         # Upsert to MongoDB
         for label in labels.spl_label_versions:
+            # Reset individual application numbers for SPL version with all
+            # application numbers for the set id
+            label["application_numbers"] = list(
+                labels.application_numbers_for_setid
+            )
             _mongo_client.upsert(
                 MONGO_COLLECTION_NAME,
                 {"spl_id": label["spl_id"], "set_id": label["set_id"]},
