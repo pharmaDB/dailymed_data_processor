@@ -50,14 +50,14 @@ class SplHistoricalLabels:
 
     LABEL_SECTIONS = [
         "INDICATIONS AND USAGE",
-        "DOSAGE AND ADMINISTRATION",
+        # "DOSAGE AND ADMINISTRATION",
         "DOSAGE FORMS AND STRENGTHS",
-        "USE IN SPECIFIC POPULATIONS",
+        # "USE IN SPECIFIC POPULATIONS",
         "DESCRIPTION",
-        "CLINICAL PHARMACOLOGY",
-        "CLINICAL STUDIES",
+        # "CLINICAL PHARMACOLOGY",
+        # "CLINICAL STUDIES",
         # the following are taken from example 1 above
-        "CLINICAL TRIALS",
+        # "CLINICAL TRIALS",
         "INDICATIONS",
         # the following are taken from example 4 above
         "ACTIVE INGREDIENT",
