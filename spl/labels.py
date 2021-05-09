@@ -362,16 +362,18 @@ def process_labels_for_set_id(set_id_history):
             label["application_numbers"] = list(
                 labels.application_numbers_for_setid
             )
-            # Insert label if not exists
+            # Merge with existing data
             existing = _mongo_client.find(
                 MONGO_COLLECTION_NAME,
                 {"spl_id": label["spl_id"], "set_id": label["set_id"]},
             )
-            if not existing.count():
-                _mongo_client.insert(
-                    MONGO_COLLECTION_NAME,
-                    label,
-                )
+            if existing.count():
+                label = {**existing[0], **label}
+            _mongo_client.upsert(
+                MONGO_COLLECTION_NAME,
+                {"spl_id": label["spl_id"], "set_id": label["set_id"]},
+                label,
+            )
         return True
     return False
 
