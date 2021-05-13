@@ -24,7 +24,7 @@ class SplHistoryResponse:
         # Attributes to store processed data
         self.data = {}
         # Process
-        self.__fetch_and_process()
+        self._fetch_and_process()
 
     def get_total_pages(self):
         """Returns the value of the total pages of set id history, from its
@@ -35,7 +35,7 @@ class SplHistoryResponse:
         """
         return int(self.data["metadata"]["total_pages"])
 
-    def __fetch_and_process(self):
+    def _fetch_and_process(self):
         """
         Fetches the spl history and processes it. The parsed data is stored in the
         spl attribute.

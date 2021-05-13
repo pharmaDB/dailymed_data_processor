@@ -18,14 +18,14 @@ class SplIndexFile:
     BASE_URL = "https://dailymed.nlm.nih.gov/dailymed/services/v2/spls.xml"
 
     def __init__(self, page_number):
-        if page_number is None:
-            raise ValueError("Page number is not defined")
+        if not isinstance(page_number, int):
+            raise ValueError("Invalid Page number")
         self.page_number = page_number
         # Attributes to store processed data
         self.metadata = {}
         self.spls = []
         # Process
-        self.__fetch_and_process()
+        self._fetch_and_process()
 
     def get_max_page_number(self):
         """Returns the max page number for the SPL index data from the metadata of the
@@ -36,7 +36,7 @@ class SplIndexFile:
         """
         return int(self.metadata["total_pages"])
 
-    def __fetch_and_process(self):
+    def _fetch_and_process(self):
         """
         Fetches the spl file and processes it. The parsed data is stored in the
         spls attribute.

@@ -34,5 +34,12 @@ python3 main.py --start_page=1 --num_pages=2
     - `write_index_data`
     - `write_history_data`
 
+## Running Tests
+
+Unit tests are created using Pytest and can be run simply using the following command, from the source root.
+```
+$ PYTHONPATH=. pytest
+```
+
 ## Code Formatting
 It is recommended to use the [Black Code Formatter](https://github.com/psf/black) which can be installed as a plugin for most IDEs. `pyproject.toml` holds the formatter settings.

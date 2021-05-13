@@ -1,0 +1,616 @@
+{
+    "metadata": {
+        "current_page": "1",
+        "current_url": "https://dailymed.nlm.nih.gov/dailymed/services/v2/spls.xml?page=1",
+        "db_published_date": "May 12, 2021 05:41:50PM EST",
+        "elements_per_page": "100",
+        "next_page": "2",
+        "next_page_url": "https://dailymed.nlm.nih.gov/dailymed/services/v2/spls.xml?page=2&pagesize=100",
+        "previous_page": "null",
+        "previous_page_url": "null",
+        "total_elements": "138802",
+        "total_pages": "1389"
+    },
+    "spls": [
+        {
+            "setid": "025c0c24-ac0f-42ed-a17c-fd70f1efd38a",
+            "spl_version": "1",
+            "title": "PHARMA C WIPES HEMORRHOIDAL (WITCH HAZEL) CLOTH [KLEEN TEST PRODUCTS CORPORATION]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "029716bd-ee1a-484c-bf1f-ec8d02d5281b",
+            "spl_version": "1",
+            "title": "SULFASALAZINE TABLET [CHARTWELL RX, LLC.]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "071324af-5ea6-4aa9-b097-31a6fc074894",
+            "spl_version": "1",
+            "title": "SULFASALAZINE TABLET [HERITAGE PHARMACEUTICALS INC. D/B/A AVET PHARMACEUTICALS INC.]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "15eb3bf2-3a89-4381-8b05-9a123ec04dd1",
+            "spl_version": "1",
+            "title": "BACITRACIN ZINC OINTMENT [H2-PHARMA, LLC]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "23a88257-d545-4d34-94c3-760fb2e915c0",
+            "spl_version": "1",
+            "title": "JOINTFORCE A-HP (APIS MELLIFICA, BRYONIA (ALBA), CAUSTICUM, COLCHICUM AUTUMNALE, KALMIA LATIFOLIA, LEDUM PALUSTRE, PULSATILLA (VULGARIS), RHODODENDRON CHRYSANTHUM, RHUS TOX) LIQUID [BIOACTIVE NUTRITIONAL, INC.]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "3f12da60-26d1-4407-8e02-c3213ea3ad2a",
+            "spl_version": "1",
+            "title": "ZHUIFENG GAO PAIN RELIEVING (MENTHOL) PLASTER [GUILIN CHINA RESOURCES TIANHE PHARMACEUTICAL CO LTD]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "5cb3b887-919f-4c47-aa07-eb10182dfcc3",
+            "spl_version": "1",
+            "title": "OMEPRAZOLE, SODIUM BICARBONATE CAPSULE [WOODWARD PHARMA SERVICES LLC]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "6011d967-c025-4e1b-9648-315cbde8cefd",
+            "spl_version": "1",
+            "title": "SOAPBOX 70 HAND SANITIZER LIGHT CITRUS SCENT (ALCOHOL) GEL [SOAPBOX SOAPS, LLC]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "69099658-a584-49a9-8a95-de258a697c4f",
+            "spl_version": "1",
+            "title": "MOTION SICKNESS RELIEF (MECLIZINE HCL) TABLET [CARDINAL HEALTH]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "73d1f079-d8eb-44f4-b33d-05fb25b80c8f",
+            "spl_version": "1",
+            "title": "FE-VITE IRON ORAL SOLUTION (FERROUS SULFATE) SOLUTION [AKRON PHARMA]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "9a1ffbf8-b3b8-4b1d-88a9-99746fbb9be1",
+            "spl_version": "1",
+            "title": "SUNPROOF INTENSIVE LIP BALM BROAD SPECTRUM SPF 24 SUNSCREEN FRESH MINT (AVOBENZONE, HOMOSALATE, AND OCTISALATE) LIPSTICK [THRIVE CAUSEMETICS]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "a0a75b54-e484-4e89-bdf2-e2c864cd2734",
+            "spl_version": "1",
+            "title": "VANIBISS BUTT AND THIGHS ACNE TREATMENT CREAM (SALICYLIC ACID) CREAM [VANIBISS INC]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "a9c88a41-3ff7-78f7-e053-2995a90adb8f",
+            "spl_version": "1",
+            "title": "LOVASTATIN TABLET [DENTON PHARMA, INC. DBA NORTHWIND PHARMACEUTICALS]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "b622b6cb-f756-439e-8684-d45ee1ea75ab",
+            "spl_version": "1",
+            "title": "SINUS PLUS HEADACHE (ACETAMINOPHEN, PHENYLEPHRINE HCL) TABLET, FILM COATED [KROGER COMPANY]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "bff75e1e-91e5-a160-e053-2a95a90a6da6",
+            "spl_version": "1",
+            "title": "HAND SANITIZER (ALCOHOL) LIQUID [MISSION SPIRITS LLC]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "c0e06da3-3d94-12a8-e053-2a95a90a6835",
+            "spl_version": "1",
+            "title": "DILTIAZEM HYDROCHLORIDE TABLET [DENTON PHARMA, INC. DBA NORTHWIND PHARMACEUTICALS]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "c16edad6-423b-6ff0-e053-2a95a90a0240",
+            "spl_version": "1",
+            "title": "LISINOPRIL TABLET [NORTHWIND PHARMACEUTICALS]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "c181ccd6-bb72-0ae6-e053-2995a90afb16",
+            "spl_version": "1",
+            "title": "GLYBURIDE TABLET [DENTON PHARMA, INC. DBA NORTHWIND PHARMACEUTICALS]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "c194a7b0-1e7e-a32b-e053-2995a90a7dbd",
+            "spl_version": "1",
+            "title": "DULOXETINE CAPSULE, DELAYED RELEASE [NORTHWIND PHARMACEUTICALS]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "c195b8ea-c1bf-453f-e053-2a95a90a2121",
+            "spl_version": "1",
+            "title": "DICYCLOMINE HYDROCHLORIDE TABLET [NORTHWIND PHARMACEUTICALS]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "c1c38e32-49ed-7cec-e053-2995a90a7c98",
+            "spl_version": "1",
+            "title": "HAND SANITIZER (ALCOHOL) GEL [IVM ESPECIALIDADES QUIMICAS, S.A. DE C.V.]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "c1c4a200-990f-ac7c-e053-2a95a90abcbf",
+            "spl_version": "1",
+            "title": "OXYGEN GAS [MEDICAL PRODUCTS GROUP LLC]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "c1cad00f-f9c8-573a-e053-2a95a90a508b",
+            "spl_version": "1",
+            "title": "W.SKIN NATURAL FERMENTED GRAIN MASK SHEET (CENTELLA ASIATICA EXTRACT) LIQUID [J&J COMPANY]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "c1f29251-c9f2-5740-e053-2a95a90a34cb",
+            "spl_version": "1",
+            "title": "ANTI-BACTERIAL HAND SANITIZER GEL [COSBE LABORATORY INC]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "c1f4832d-4d5c-8c49-e053-2a95a90ac9fe",
+            "spl_version": "1",
+            "title": "POTASSIUM CHLORIDE CAPSULE, EXTENDED RELEASE [GRANULES PHARMACEUTICALS INC]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "c20e89b4-57b5-259d-e053-2a95a90a0038",
+            "spl_version": "1",
+            "title": "NITROGLYCERIN TABLET [HF ACQUISITION CO LLC, DBA HEALTHFIRST]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "c20f1f4d-59b3-6bbe-e053-2a95a90abaf1",
+            "spl_version": "1",
+            "title": "IBUPROFEN TABLET, FILM COATED [NORTHWIND PHARMACEUTICALS]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "c20f4ab2-8dbd-b83f-e053-2995a90a52db",
+            "spl_version": "1",
+            "title": "NP THYROID (LEVOTHYROXINE, LIOTHYRONINE) TABLET [DIRECT RX]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "c20f803c-e965-9dd8-e053-2995a90a92ba",
+            "spl_version": "1",
+            "title": "PRIMIDONE TABLET [DIRECT RX]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "c20fce25-8123-fe5d-e053-2a95a90a53a0",
+            "spl_version": "1",
+            "title": "VITAMIN A AND D (PETROLATUM) OINTMENT [TRIFECTA PHARMACEUTICALS USA LLC]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "c21095a9-17b1-555a-e053-2a95a90a51fd",
+            "spl_version": "1",
+            "title": "BACLOFEN TABLET [AVPAK]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "c213c327-68b7-da5b-e053-2a95a90a4028",
+            "spl_version": "1",
+            "title": "METOPROLOL SUCCINATE TABLET, EXTENDED RELEASE [NORTHWIND PHARMACEUTICALS]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "c214e5c2-53ea-31bd-e053-2995a90a886a",
+            "spl_version": "1",
+            "title": "KEY LIME PIE SHAKE SPF 15 BROAD SPECTRUM LIP BALM STICK [RAINING ROSE, INC]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "c2150247-ff7d-9863-e053-2995a90a3f01",
+            "spl_version": "1",
+            "title": "RASPBERRY LIME MARGARITA SPF 15 BROAD SPECTRUM LIP BALM STICK [RAINING ROSE, INC]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "c21a4c3a-82c0-0bfb-e053-2995a90a2b65",
+            "spl_version": "1",
+            "title": "POLOCAINE (MEPIVACAINE HCL) INJECTION, SOLUTION [HF ACQUISITION CO LLC, DBA HEALTHFIRST]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "c21b1fb7-d4af-2647-e053-2995a90a3b17",
+            "spl_version": "1",
+            "title": "W.SKIN STOP-AGING SON JOO RUM HANDCREAM PLUS (CENTELLA ASIATICA EXTRACT) CREAM [J&J COMPANY]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "c21c08a2-69f2-93b3-e053-2a95a90af60c",
+            "spl_version": "1",
+            "title": "NATURE HAND TOUCH GREEN TEA (ETHANOL) 70% 40ML (ALCOHOL) LIQUID [DAI KYOUNG PHARMACEUTIC CO.,LTD.]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "c21c59c3-4224-a452-e053-2995a90aab5e",
+            "spl_version": "1",
+            "title": "NATURE HAND TOUCH CHERRY (ETHANOL) 70% 40ML (ALCOHOL) LIQUID [DAI KYOUNG PHARMACEUTIC CO.,LTD.]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "c21c5b7d-abc4-6a89-e053-2995a90a9250",
+            "spl_version": "1",
+            "title": "NATURE HAND TOUCH MORINGA (ETHANOL) 70% 40ML (ALCOHOL) LIQUID [DAI KYOUNG PHARMACEUTIC CO.,LTD.]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "d5f119ac-45c3-4a97-9aef-edb87d7d2b8e",
+            "spl_version": "1",
+            "title": "SENNA (SENNOSIDES) TABLET, FILM COATED [AKRON PHARMA INC.]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "e4995a10-1df4-47a7-888f-089f4c5daff8",
+            "spl_version": "1",
+            "title": "COLLAGEN PEPTIDES POWDER [ALLEGIANT HEALTH]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "e4b49550-1ca3-4bd7-854d-409b53fa5e26",
+            "spl_version": "1",
+            "title": "ROHTO MAX STRENGTH (NAPHAZOLINE HYDROCHLORIDE, POLYSORBATE 80) LIQUID [THE MENTHOLATUM COMPANY]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "ff1681c3-6b2e-4c64-afca-a073c0015f38",
+            "spl_version": "1",
+            "title": "SUNPROOF INTENSIVE LIP BALM BROAD SPECTRUM SPF 24 SUNSCREEN SWEET TANGERINE (AVOBENZONE, HOMOSALATE, AND OCTISALATE) LIPSTICK [THRIVE CAUSEMETICS]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "33ee4598-cbcc-45e0-a48e-dc0101e1f204",
+            "spl_version": "2",
+            "title": "CARBIDOPA TABLET [NORTHSTAR RX LLC]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "4a2af7fc-f259-10b6-e054-00144ff8d46c",
+            "spl_version": "2",
+            "title": "FLUOXETINE (FLUOXETINE HYDROCHLORIDE) CAPSULE [NUCARE PHARMACEUTICALS, INC.]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "526266a9-e6eb-40e9-912e-95a87563a71c",
+            "spl_version": "2",
+            "title": "OGENASHIELD MOISTURIZING HAND SANITIZER (ISOPROPYL ALCOHOL) GEL [OGENA SOLUTIONS CANADA CORP]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "5674ba36-8b62-4e46-81e5-ef2c57bea102",
+            "spl_version": "2",
+            "title": "MAXI NICOTINE (NICOTINE POLACRILEX) LOZENGE [RITE AID CORPORATION]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "5cdfba1e-7179-a2ee-e053-2991aa0adce9",
+            "spl_version": "2",
+            "title": "GLYBURIDE TABLET [NUCARE PHARMCEUTICALS,INC.]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "7ef9b3e7-2323-7cd7-e053-2991aa0adf9b",
+            "spl_version": "2",
+            "title": "DULOXETINE CAPSULE, DELAYED RELEASE [NUCARE PHARMACEUTICALS,INC.]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "826f63b2-fd18-4213-be38-a430d78897cb",
+            "spl_version": "2",
+            "title": "NICOTINE POLACRILEX GUM, CHEWING [WALGREENS]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "8bae24c6-72eb-c94e-e053-2a95a90a0bb0",
+            "spl_version": "2",
+            "title": "NAPROXEN SODIUM TABLET, FILM COATED [DIRECT_RX]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "90c31478-4bd5-43bb-9287-d014b62c3b3f",
+            "spl_version": "2",
+            "title": "PILOCARPINE HYDROCHLORIDE TABLET, FILM COATED [NORTHSTAR RX LLC]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "930fcbdd-b5fd-4fea-ba4e-008c0317eadd",
+            "spl_version": "2",
+            "title": "MILBEHART FLAVORED (MILBEMYCIN OXIME) TABLET [VIRBAC AH, INC.]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "a7e4e43a-7abc-e2a5-e053-2995a90ab5f4",
+            "spl_version": "2",
+            "title": "BENAZEPRIL HYDROCHLORIDE TABLET, COATED [DIRECT RX]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "a8600b12-f180-0b27-e053-2995a90acbd9",
+            "spl_version": "2",
+            "title": "NABUMETONE TABLET [DIRECT RX]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "ada393b0-4fd9-1436-e053-2995a90a13e3",
+            "spl_version": "2",
+            "title": "HAND SANITIZER (ISOPROPYL ALCOHOL) CLOTH [THE SECUREPHARMA PARTNERSHIP SRL]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "b11b677f-af33-bd6a-e053-2a95a90aeefe",
+            "spl_version": "2",
+            "title": "HYDROCHLOROTHIAZIDE TABLET [DENTON PHARMA, INC. DBA NORTHWIND PHARMACEUTICALS]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "b6c23be1-fb76-ac99-e053-2995a90afc04",
+            "spl_version": "2",
+            "title": "ONDANSETRON TABLET, ORALLY DISINTEGRATING [DENTON PHARMA, INC. DBA NORTHWIND PHARMACEUTICALS]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "b868acbf-9421-6db0-e053-2a95a90a28c0",
+            "spl_version": "2",
+            "title": "PHENAZOPYRIDINE HCL 200MG (PHENAZOPYRIDINE HYDROCHLORIDE) TABLET [DENTON PHARMA, INC. DBA NORTHWIND PHARMACEUTICALS]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "bc00bbf8-52bb-fa75-e053-2a95a90a9406",
+            "spl_version": "2",
+            "title": "DAYTIME COLD AND FLU (DEXTROMETHORPHAN HYDROBROMIDE, ACETAMINOPHEN, PHENYLEPHRINE HYDROCHLORIDE) CAPSULE, LIQUID FILLED [KROGER COMPANY]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "bc0115a3-5322-855d-e053-2995a90aba27",
+            "spl_version": "2",
+            "title": "NIGHTTIME COLD AND FLU (DEXTROMETHORPHAN HYDROBROMIDE, ACETAMINOPHEN, DOXYLAMINE SUCCINATE) CAPSULE, LIQUID FILLED [KROGER COMPANY]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "bc019c9e-8fac-5fd3-e053-2a95a90a7ccd",
+            "spl_version": "2",
+            "title": "ALLERGY (DIPHENHYDRAMINE HYDROCHLORIDE) TABLET, FILM COATED [KROGER COMPANY]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "bc020340-ef39-e49a-e053-2a95a90af810",
+            "spl_version": "2",
+            "title": "ALLERGY (CETIRIZINE HYDROCHLORIDE) TABLET, FILM COATED [KROGER COMPANY]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "bdc06dec-3040-978d-e053-2995a90a636d",
+            "spl_version": "2",
+            "title": "GLIPIZIDE TABLET, EXTENDED RELEASE [DENTON PHARMA, INC. DBA NORTHWIND PHARMACEUTICALS]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "bdc16768-08fa-91b1-e053-2a95a90a0652",
+            "spl_version": "2",
+            "title": "ATORVASTATIN CALCIUM TABLET, FILM COATED [DENTON PHARMA, INC. DBA NORTHWIND PHARMACEUTICALS]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "d0c620e3-3cbf-45c8-abcb-28a2efa719db",
+            "spl_version": "2",
+            "title": "NICOTINE (NICOTINE POLACRILEX) LOZENGE [RITE AID CORPORATION]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "d824ae3b-1467-4b07-8100-e58691865d50",
+            "spl_version": "2",
+            "title": "POT-PEN (PENICILLIN G POTASSIUM) POWDER, FOR SOLUTION [VETOQUINOL N.-A. INC.]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "dda17eef-cd75-4c82-b468-09111298282d",
+            "spl_version": "2",
+            "title": "NICOTINE (NICOTINE POLACRILEX) GUM, CHEWING [WALGREENS]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "f4820d5d-0eca-43fd-bf60-b9cb37bc342d",
+            "spl_version": "2",
+            "title": "METHOCARBAMOL POWDER [AX PHARMACEUTICAL CORP]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "11771dcf-0803-4de9-a2fe-73edec256209",
+            "spl_version": "3",
+            "title": "VIVLODEX (MELOXICAM) CAPSULE [EGALET US INC.]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "27f15fac-7d98-4114-a2ec-92494a91da98",
+            "spl_version": "3",
+            "title": "RYBELSUS (ORAL SEMAGLUTIDE) TABLET [NOVO NORDISK]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "3b76067a-8589-0abb-e054-00144ff8d46c",
+            "spl_version": "3",
+            "title": "ATENOLOL TABLET [NUCARE PHARMACEUTICALS, INC.]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "3ef32f80-7392-4a8c-b2c9-b58e4af61191",
+            "spl_version": "3",
+            "title": "NATUREPLEX LIDOCAINE 4% (LIDOCAINE) CREAM [NATUREPLEX LLC]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "4af5e64b-b4e6-446f-a9b0-7d2629045f4b",
+            "spl_version": "3",
+            "title": "GAS RELIEF (SIMETHICONE) CAPSULE, LIQUID FILLED [DISCOUNT DRUG MART]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "7366efad-8e3c-8bc3-e053-2991aa0a713b",
+            "spl_version": "3",
+            "title": "METFORMIN HYDROCHLORIDE TABLET [NUCARE PHARMACEUTICALS,INC.]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "7471ec99-6c0b-40d8-a9cf-85240a0d471a",
+            "spl_version": "3",
+            "title": "CHILDRENS STOMACH RELIEF (CALCIUM CARBONATE) TABLET, CHEWABLE [WAL-MART STORES INC]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "80ad50e8-107d-1b19-e053-2991aa0a665c",
+            "spl_version": "3",
+            "title": "OMEPRAZOLE CAPSULE, DELAYED RELEASE [DENTON PHARMA, INC. DBA NORTHWIND PHARMACEUTICALS]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "82f8f9fd-7ae8-f0f4-e053-2a91aa0a7b8a",
+            "spl_version": "3",
+            "title": "IBUPROFEN TABLET, FILM COATED [DIRECTRX]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "8771de7e-b066-ea00-e053-2a95a90a7512",
+            "spl_version": "3",
+            "title": "FENOFIBRATE TABLET [DENTON PHARMA, INC. DBA NORTHWIND PHARMACEUTICALS]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "89c0abb8-31f5-4a7e-94d9-08945aa7787f",
+            "spl_version": "3",
+            "title": "DICLOFENAC SODIUM TABLET, EXTENDED RELEASE [LANNETT COMPANY, INC.]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "939fce7e-55df-4dc5-916b-a533448e962f",
+            "spl_version": "3",
+            "title": "ASPIRIN REGULAR STRENGTH (ASPIRIN) TABLET, COATED [RUGBY LABORATORIES]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "9f04638c-e828-4a58-8223-150b0b8ac154",
+            "spl_version": "3",
+            "title": "TUSSIN COUGH GELS (DEXTROMETHORPHAN HBR) CAPSULE, LIQUID FILLED [DISCOUNT DRUG MART]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "af71e02d-e7c7-f925-e053-2995a90a0861",
+            "spl_version": "3",
+            "title": "MAXIMUM STRENGTH ANTACID (ALUMINUM HYDROXIDE, MAGNESIUM HYDROXIDE, DIMETHICONE) SUSPENSION [CVS PHARMACY]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "b1169882-c785-62ab-e053-2995a90ae641",
+            "spl_version": "3",
+            "title": "BUPROPION HYDROCHLORIDE SR (BUPROPION HYDROCHLORIDE) TABLET, FILM COATED, EXTENDED RELEASE [DENTON PHARMA, INC. DBA NORTHWIND PHARMACEUTICALS]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "b850d95f-d150-4694-b345-3266184f5631",
+            "spl_version": "3",
+            "title": "CLEAN AND CLEAR ACNE TRIPLE CLEAR CLEANSING CLAY MASK (SALICYLIC ACID) CREAM [JOHNSON & JOHNSON CONSUMER INC.]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "bf540b64-d6af-072d-e053-2995a90a98e4",
+            "spl_version": "3",
+            "title": "HAND SANITIZER (ETHYL ALCOHOL) LIQUID [ECOFORM LLC]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "3cdfa932-6a20-2a82-e054-00144ff88e88",
+            "spl_version": "4",
+            "title": "REGULAR STRENGTH ANTACID MINT (ALUMINUM HYDROXIDE, MAGNESIUM HYDROXIDE, DIMETHICONE) LIQUID [CVS]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "3e51da46-6a81-4b74-b16e-3fc298a4ba59",
+            "spl_version": "4",
+            "title": "AVEENO KIDS CONTINUOUS PROTECTION SENSITIVE SKIN SUNSCREEN BROAD SPECTRUM SPF 50 (ZINC OXIDE) LOTION [JOHNSON & JOHNSON CONSUMER INC.]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "6e9e2bf2-6cd2-506d-e053-2a91aa0addb7",
+            "spl_version": "4",
+            "title": "CARVEDILOL TABLET, FILM COATED [NUCARE PHARMACEUTICALS,INC.]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "9949407f-e410-7f47-e053-2995a90a7369",
+            "spl_version": "4",
+            "title": "HYDRALAZINE HYDROCHLORIDE INJECTION [HF ACQUISITION CO LLC, DBA HEALTHFIRST]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "999dd95d-87fe-12c0-e053-2995a90aa9f7",
+            "spl_version": "4",
+            "title": "1% LIDOCAINE HCI INJECTION, SOLUTION [HF ACQUISITION CO LLC, DBA HEALTHFIRST]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "b8663046-67a4-4858-e053-2a95a90a8aed",
+            "spl_version": "4",
+            "title": "LIDOCAINE OINTMENT [DIRECT RX]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "c0d1c22b-566b-4776-bdbf-00f96dad0cae",
+            "spl_version": "4",
+            "title": "ZARXIO (FILGRASTIM-SNDZ) INJECTION, SOLUTION [SANDOZ INC.]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "e45c75dc-d381-475b-b649-a871c8a36e60",
+            "spl_version": "4",
+            "title": "METHYLPHENIDATE HYDROCHLORIDE CD (METHYLPHENIDATE HYDROCHLORIDE) CAPSULE, EXTENDED RELEASE [LANNETT COMPANY, INC.]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "fc65fe79-c93b-4247-b9af-e562792a3e64",
+            "spl_version": "4",
+            "title": "NAPROXEN SODIUM CAPSULE, LIQUID FILLED [P & L DEVELOPMENT, LLC]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "3b84746f-05ab-4f88-b9ae-efb8c5dfc233",
+            "spl_version": "5",
+            "title": "ASPIRIN LOW DOSE (ASPIRIN) TABLET, COATED [SAM'S WEST INC]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "4a655cde-283f-4ec8-a3d9-5f539c55c204",
+            "spl_version": "5",
+            "title": "SODIUM CHLORIDE INJECTION, SOLUTION, CONCENTRATE [FRESENIUS KABI USA, LLC]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "9be0ad4e-3efa-1a24-e053-2995a90a60d5",
+            "spl_version": "5",
+            "title": "GLYCOPYRROLATE INJECTION [HF ACQUISITION CO LLC, DBA HEALTHFIRST]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "c602e1b3-1113-4097-810d-fd07a1e608bf",
+            "spl_version": "5",
+            "title": "NEUTROGENA OIL-FREE MOISTURE SUNSCREEN BROAD SPECTRUM SPF 35 (AVOBENZONE, HOMOSALATE, OCTISALATE, OCTOCRYLENE, AND OXYBENZONE) LOTION [JOHNSON & JOHNSON CONSUMER INC.]",
+            "published_date": "May 12, 2021"
+        },
+        {
+            "setid": "de619e27-9384-4b86-abdc-de0557cd39e8",
+            "spl_version": "5",
+            "title": "SILODOSIN CAPSULE [AMNEAL PHARMACEUTICALS NY LLC]",
+            "published_date": "May 12, 2021"
+        }
+    ]
+}
