@@ -1,0 +1,30 @@
+{
+    "data": {
+        "spl": {
+            "title": "VITRAKVI (LAROTRECTINIB) CAPSULE VITRAKVI (LAROTRECTINIB) SOLUTION [LOXO ONCOLOGY, INC.]",
+            "setid": "9525f887-a055-4e33-8e92-898d42828cd1"
+        },
+        "history": [
+            {
+                "spl_version": 3,
+                "published_date": "May 02, 2019"
+            },
+            {
+                "spl_version": 1,
+                "published_date": "Dec 06, 2018"
+            }
+        ]
+    },
+    "metadata": {
+        "db_published_date": "May 12, 2021 05:41:50PM EST",
+        "elements_per_page": 100,
+        "current_url": "https://dailymed.nlm.nih.gov/dailymed/services/v2/spls/9525f887-a055-4e33-8e92-898d42828cd1/history",
+        "next_page_url": "null",
+        "total_elements": 2,
+        "total_pages": 1,
+        "current_page": 1,
+        "previous_page": "null",
+        "previous_page_url": "null",
+        "next_page": "null"
+    }
+}

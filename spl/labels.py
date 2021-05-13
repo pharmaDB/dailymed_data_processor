@@ -89,9 +89,9 @@ class SplHistoricalLabels:
         self.application_numbers_for_setid = set()
         self.spl_label_versions = []
         # Process
-        self.__fetch_and_process()
+        self._fetch_and_process()
 
-    def __fetch_and_process(self):
+    def _fetch_and_process(self):
         """
         Fetches the spl version label data and processes it. The parsed data is
         stored in the spl_label_versions attribute. If any version has an
