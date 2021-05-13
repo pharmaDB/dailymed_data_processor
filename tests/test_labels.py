@@ -9,9 +9,15 @@ from spl.labels import (
 )
 
 TEST_DATA_DIR = os.path.join("tests", "testdata")
-TEMPDATA_DIR = "tempdata"
+TEMPDATA_DIR = os.path.join("tests", "tempdata")
 TEST_SET_ID = "1b5e2860-6855-4a65-8bbc-e064172a1adf"
 TEST_SET_SPL_VERSION = 1
+
+
+@pytest.fixture
+def setup_temp_datadir():
+    if not os.path.exists(TEMPDATA_DIR):
+        os.makedirs(TEMPDATA_DIR)
 
 
 class MockResponse:
@@ -72,7 +78,7 @@ def test_class_attributes():
     ]
 
 
-def test_init_method(mock_fetch_and_process):
+def test_init_method(setup_temp_datadir, mock_fetch_and_process):
     # Check invalid initialization
     with pytest.raises(ValueError):
         _ = SplHistoricalLabels(None, TEMPDATA_DIR)
@@ -94,7 +100,7 @@ def test_init_method(mock_fetch_and_process):
     assert spl_history.called == True
 
 
-def test_fetch_and_process(mock_request):
+def test_fetch_and_process(setup_temp_datadir, mock_request):
     spl_data = {
         "data": {
             "spl": {"setid": TEST_SET_ID},
