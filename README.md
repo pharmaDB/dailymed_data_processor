@@ -38,7 +38,7 @@ python3 main.py --start_page=1 --num_pages=2
 
 Unit tests are created using Pytest and can be run simply using the following command, from the source root.
 ```
-$ PYTHONPATH=. pytest
+$ PYTHONPATH=. pytest -vv
 ```
 
 ## Code Formatting
