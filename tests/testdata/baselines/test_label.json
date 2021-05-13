@@ -1,0 +1,41 @@
+[
+    {
+        "application_numbers": [
+            "21812"
+        ],
+        "set_id": "1b5e2860-6855-4a65-8bbc-e064172a1adf",
+        "spl_id": "ab36b844-19de-4340-b32b-5e3abdaa5895",
+        "spl_version": "1",
+        "published_date": "2016-03-09",
+        "name": "Mens rogaine Minoxidil  - Unscented Formula",
+        "generic_name": "Minoxidil",
+        "active_ingredient": "Minoxidil",
+        "sections": [
+            {
+                "name": "Active ingredient",
+                "text": "Minoxidil 5% w/w (without propellant)",
+                "parent": null
+            },
+            {
+                "name": "Purpose",
+                "text": "Hair regrowth treatment for men",
+                "parent": null
+            },
+            {
+                "name": "Use",
+                "text": "to regrow hair on the top of the scalp (vertex only, see pictures on side of this carton)",
+                "parent": null
+            },
+            {
+                "name": "Directions",
+                "text": "apply half a capful 2 times a day to the scalp in the hair loss area\nmassage into scalp with fingers, then wash hands well\nsee enclosed booklet for complete directions on how to use\nusing more or more often will not improve results\ncontinued use is necessary to increase and keep your hair regrowth or hair loss will begin again",
+                "parent": null
+            },
+            {
+                "name": "Inactive ingredients",
+                "text": "butane, butylated hydroxytoluene, cetyl alcohol, citric acid, glycerin, isobutane, lactic acid, polysorbate 60, propane, purified water, SD alcohol40-B, stearyl alcohol",
+                "parent": null
+            }
+        ]
+    }
+]
