@@ -72,6 +72,7 @@ def test_get_max_page_number(mock_fetch_and_process):
 
 def test_fetch_and_process(mock_request):
     spl_obj = SplIndexFile(1)
+
     # Test against baseline
     data = _read_index_first_page_baseline()
     assert spl_obj.metadata == data["metadata"]

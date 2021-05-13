@@ -18,8 +18,8 @@ class SplHistoryResponse:
     RESOURCE_PATH = "history"
 
     def __init__(self, set_id):
-        if set_id is None:
-            raise ValueError("Set ID is not defined")
+        if not isinstance(set_id, str):
+            raise ValueError("Invalid Set ID")
         self.set_id = set_id
         # Attributes to store processed data
         self.data = {}
